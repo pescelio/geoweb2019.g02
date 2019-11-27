@@ -1,10 +1,10 @@
+function returnResult(res) {
+  //hier muss die weitere Datenverarbeitung bzw. die Kommunikation mit der Datenbank stattfinden
+}
+
 function requestIsochrones(coords, mode, range) { //coords, mode, range     Coords: "[[lon1,lat1],[lon2,lat2]]", mode: "cycling-road", "foot-walking", "driving-car", range: seconds
   //Funktion, die einen Request an Openrouteservice sendet, um Isochrone zu den übergebenen Koordinaten abzufragen
-  //Returns Array [Status, geojson]
-
-  // let coords = '[[16.369225,48.198129],[16.357001,48.233942]]'
-  // let mode = 'cycling-road'
-  // let range = 600
+  //gibt Isochrone an die Funktion returnResult() weiter, welche dann die Kommunikation mit der Datenbank übernimmt
 
   const request = new XMLHttpRequest();
 
@@ -20,22 +20,12 @@ function requestIsochrones(coords, mode, range) { //coords, mode, range     Coor
 
   request.onreadystatechange = function() {
     if (this.readyState === 4) {
-      const status = this.status;
+      // const status = this.status;
       // console.log('Headers:', this.getAllResponseHeaders());
-      const iso = this.responseText;
-      const response = [status, iso];
-      console.log('in function: ' + response);
-      return response;
-    }
-    else {
-      console.log('readyState:' + request.readyState)
+      const isochrone = this.responseText;
+      returnResult(isochrone);
     }
   };
-
-
-
 }
 
-let resultLog = requestIsochrones('[[16.369225,48.198129],[16.357001,48.233942]]', 'cycling-road', 600);
-
-console.log("RESULT: " + resultLog);
+requestIsochrones('[[16.369225,48.198129],[16.357001,48.233942]]', 'cycling-road', 600);
