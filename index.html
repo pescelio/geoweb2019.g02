@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport"  content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>Projekt-Gruppe02</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <!-- 
+    Die Auswahl der Hintergrundkarte kann/sollte unabhängig der Steuerung der Applikation erfolgen
+    Reihenfolge der Steuerung der Applikation aus meiner Sicht
+    – Auswahl des Startpunkts 1 oder 2
+    – Adresssuchfeld (über das abhängig von der Auswahl oberhalb der Startpunkt 1 oder 2 festgelegt werden kann)
+    – Auswahl der Mobilität
+    – Wegzeit
+    – Art Treffpunkt
+    -->
+
+    <div class="conrolWrapper">
+      <input type="text" id="search" placeholder="Suche..."></input>
+      <div id="control">
+        <label class="radio">
+          <input class="rb" id="base" type="radio" name="foobar" checked>
+          Base-Layer OSM
+        </label><br>
+        <label class="radio">
+          <input class="rb" id="sat" type="radio" name="foobar">
+          Sattelite
+        </label><br>
+        <p>Auswahl der Mobilität:</p>
+        <label class="radio">
+          <input class="rb" id="walk" type="radio" name="mobility" checked>
+          Zu Fuß
+        </label><br>
+        <label class="radio">
+          <input class="rb" id="bike" type="radio" name="mobility">
+          Mit dem Fahrrad
+        </label><br>
+        <label class="radio">
+          <input class="rb" id="car" type="radio" name="mobility">
+          Mit dem Auto
+        </label>
+        <p>Art des Treffpunkts:</p>
+        <select>
+          <option value="restaurant">Restaurant</option>
+          <option value="cafe">Cafe</option>
+          <option value="bar">Bar</option>
+          <option value="park">Park</option>
+        </select>
+        <p>Wegzeit</p>
+        <label class="radio">
+          <input class="rb" id="tenminutes" type="radio" name="time" checked>
+          10 Minuten
+        </label><br>
+        <label class="radio">
+          <input class="rb" id="twentyminutes" type="radio" name="time">
+          20 Minuten
+        </label><br>
+        <label class="radio">
+          <input class="rb" id="thirtyminutes" type="radio" name="time">
+          30 Minuten
+        </label><br>
+        <p>Auswahl Startpunkt</p>
+        <!-- <form name="startingpoint"> -->
+        <label class="radio">
+          <input class="rb" id="startingpoint1" type="radio" name="startingpoint" checked>
+          Startpunkt 1 <button id="buttonstart1">Aktuelle Position wählen</button>
+        </label><br>
+        <label class="radio">
+            <input class="rb" id="startingpoint2" type="radio" name="startingpoint">
+            Startpunkt 2 <button id="buttonstart2">Aktuelle Position wählen</button>
+        </label>
+      <!-- </form> -->
+      </div>
+    </div>
+
+    <div id="map" class="fullscreen">
+    </div>
+  </body>
+</html>
