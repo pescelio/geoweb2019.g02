@@ -111,20 +111,46 @@ navigator.geolocation.watchPosition(function(pos) {
   enableHighAccuracy: true
 });
 
+
+// const rbStartingpoint = document.getElementsByName('startingpoint');
+// console.log(rbStartingpoint);
+// let startingpoint = "startingpoint1";
+// const auswahlStartingpoint = document.getElementsByName('startingpoint');
+// console.log('Auswahl' + auswahlStartingpoint);
+
+// for (let x = 0; x < auswahlStartingpoint.length; x++) {
+//   auswahlStartingpoint[x].addEventListener('click', function(event) {
+//     for (let i = 0; i < rbStartingpoint.length; i++) {
+//       if (rbStartingpoint[i].checked) {
+//         startingpoint = rbStartingpoint[i].value;
+//       }
+//     }
+//   });
+// };
+// console.log('der Ausgewählte Startingpoint ist ' + startingpoint);
+
 // Prüft, welcher Radio-Button angewählt ist --> funktioniert nicht
 // function getCheckedRadio(startingpoint) {
 //   for (let i = 0; i < startingpoint.length; i++) {
 //     const button = startingpoint[i];
 //     if (button.checked) {
+//       console.log(button);
 //       return button;
 //     }
 //   }
+//   console.log(startingpoint);
 //   return undefined;
 // }
+
+
+
 // const checkedButton_start = getCheckedRadio(document.startingpoint.name);
+// console.log(document.startingpoint.name);
 // if (checkedButton_start) {
 //   console.log('The value is ' + checkedButton_start.value);
-// }
+// } else {
+// console.log('Hat nicht funktioniert!');
+//}
 
 
 
@@ -147,39 +173,65 @@ startLayer1.setStyle(new Style({
   })
 }));
 
-startLayer1.setZIndex(100); //Damit die Adressmarkierung immer zu sehen ist und nicht von anderen Layern verdeckt wird
+startLayer1.setZIndex(100); //Damit die Layer immer zu sehen ist und nicht von anderen Layern verdeckt wird
 map.addLayer(startLayer1);
 
-// Layer für Marker per Klick
-map.on('singleclick', function(e) {
-  const coords = toLonLat(e.coordinate);
-  startSource1.clear(true);
-  startSource1.addFeatures([
-    new Feature(new Point(fromLonLat(coords)))
-  ]);
+//Startingpoint Layer 2
+const startSource2 = new Vector();
+const startLayer2 = new VectorLayer({
+  source: startSource2
 });
 
+startLayer2.setStyle(new Style({
+  image: new Circle({
+    fill: new Fill({
+      color: 'rgba(0,255,0,0.4)'
+    }),
+    stroke: new Stroke({
+      color: '#00ff00',
+      width: 1.25
+    }),
+    radius: 15
+  })
+}));
 
-// Eintrag  am aktuellen Standort generieren, bei Klick auf entsprechenden Button
-const currentPosition1 = document.getElementById('buttonstart1');
+startLayer2.setZIndex(100); //Damit der Layer immer zu sehen ist und nicht von anderen Layern verdeckt wird
+map.addLayer(startLayer2);
 
-currentPosition1.addEventListener('click', function(event) {
-  navigator.geolocation.watchPosition(function(pos) {
-    const coords = [pos.coords.longitude, pos.coords.latitude];
-    console.log('GPSposition: ' + coords);
-    startSource1.clear(true);
-    startSource1.addFeatures([
+let startSource = startSource1;
+
+
+//////////////////////////////
+// Marker per Klick in Karte
+//////////////////////////////
+
+function startByClick(startSource) {
+  // const clickStartSource = startSource;
+  map.on('singleclick', function(e) {
+    const coords = toLonLat(e.coordinate);
+    console.log('StartByClick: ' + startSource + coords);
+    startSource.clear(true);
+    startSource.addFeatures([
       new Feature(new Point(fromLonLat(coords)))
     ]);
-  }, function(error) {
-   alert(`ERROR: ${error.message}`);
-  }, {
-    enableHighAccuracy: true
   });
-});
+};
+
+function startByClick1(startSource, e) {
+  // const clickStartSource = startSource;
+  const coords = toLonLat(e);
+  console.log('StartByClick1: ' + coords);
+  startSource.clear(true);
+  startSource.addFeatures([
+    new Feature(new Point(fromLonLat(coords)))
+  ]);
+};
 
 
+//////////////////////////////
 // Eintrag über Adresssuche generieren
+//////////////////////////////
+
 const xhr = new XMLHttpRequest;
 
 // Get the input field
@@ -203,7 +255,8 @@ input.addEventListener('keyup', function(event) {
       const features = geoJsonReader.readFeatures(json);
       // console.log(features[0]);
       const feature = features[0];
-      startSource1.addFeature(feature); //Source Hinzufügen
+      startSource1.addFeature(feature); 
+      console.log('GPS-Position der Adresse suche ist: ' + feature); //Source Hinzufügen
 
       // Zoom und Pan auf Suchresultat
       // const ext = feature.getGeometry().getExtent();
@@ -215,5 +268,76 @@ input.addEventListener('keyup', function(event) {
   }
 });
 
+////////////////////////////
+//Versuche, die Auswahl des Ergebnislayers 
+//über die Radiobuttons zu steuern
+////////////////////////////
+
+
+/////Ansatz 1
+// const rbStartingpoint2 = document.getElementById('startingpoint2');
+// rbStartingpoint2.addEventListener('click', function() {
+//   startSource = startSource2;
+//   console.log(startSource);
+//   startByClick(startSource);
+// });
+
+
+
+// const rbStartingpoint1 = document.getElementById('startingpoint1');
+// rbStartingpoint1.addEventListener('click', function() {
+//   startSource = startSource1;
+//   console.log(startSource);
+//   startByClick(startSource);
+// });
+
+/////Ansatz 2
+
+const rbStartingpoint1 = document.getElementById('startingpoint1');
+
+console.log(startSource);
+console.log(rbStartingpoint1.checked);
+
+map.on('singleclick', function(e) {
+  if (rbStartingpoint1.checked = true) {
+    startByClick1(startSource1, e.coordinate);
+  } else {
+    startByClick1(startSource2, e.coordinate);
+  }
+});
+
 // sync view of map with the url-hash
 sync(map);
+
+// GPS-Standort in Startingpoint-Layer 1 erzeugen
+document.getElementById('buttonstart1').addEventListener('click', function(event) {
+  navigator.geolocation.watchPosition(function(pos) {
+    const coords = [pos.coords.longitude, pos.coords.latitude];
+    console.log('GPSposition 1: ' + coords);
+    startSource1.clear(true);
+    startSource1.addFeatures([
+      new Feature(new Point(fromLonLat(coords)))
+    ]);
+  }, function(error) {
+    alert(`ERROR: ${error.message}`);
+  }, {
+    enableHighAccuracy: true
+  });
+});
+
+
+// Eintrag am aktuellen Stanodort in Startingpoint-Layer 2 erzeugen
+document.getElementById('buttonstart2').addEventListener('click', function(event) {
+  navigator.geolocation.watchPosition(function(pos) {
+    const coords = [pos.coords.longitude, pos.coords.latitude];
+    console.log('GPSposition 2: ' + coords);
+    startSource2.clear(true);
+    startSource2.addFeatures([
+      new Feature(new Point(fromLonLat(coords)))
+    ]);
+  }, function(error) {
+    alert(`ERROR: ${error.message}`);
+  }, {
+    enableHighAccuracy: true
+  });
+});
