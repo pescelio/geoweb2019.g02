@@ -261,6 +261,12 @@ input.addEventListener('keyup', function(event) {
       startSource.addFeature(feature); //Source Hinzufügen
       // Defintion der Koordinaten der Adresssuche
       const coords = [feature.values_.extent[0], feature.values_.extent[1]];
+      if (startSource === startSource1) {
+        coords1 = coords;
+      } else {
+        coords2 = coords;
+      }
+
       console.log('Koordinaten der Adressesuche sind: ' + coords);
 
 
@@ -280,6 +286,7 @@ input.addEventListener('keyup', function(event) {
 document.getElementById('buttonstart1').addEventListener('click', function(event) {
   navigator.geolocation.getCurrentPosition(function(pos) {
     const coords = [pos.coords.longitude, pos.coords.latitude];
+    coords1 = coords;
     console.log('GPSposition 1: ' + coords);
     startSource1.clear(true);
     startSource1.addFeatures([
@@ -297,6 +304,7 @@ document.getElementById('buttonstart1').addEventListener('click', function(event
 document.getElementById('buttonstart2').addEventListener('click', function(event) {
   navigator.geolocation.getCurrentPosition(function(pos) {
     const coords = [pos.coords.longitude, pos.coords.latitude];
+    coords2 = coords;
     console.log('GPSposition 2: ' + coords);
     startSource2.clear(true);
     startSource2.addFeatures([
