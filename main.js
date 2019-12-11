@@ -37,6 +37,9 @@ import {circular} from 'ol/geom/Polygon';
 //control
 import Zoom from 'ol/control/Zoom';
 
+// import der funktion für die isochronenabfrage
+import {requestIsochrones} from './request.js';
+
 
 const contr = document.getElementById('control')
 
@@ -49,6 +52,9 @@ const map = new Map({
   })
 });
 
+// sync view of map with the url-hash
+sync(map);
+
 // Satelliten-Layer einrichten
 const satLayer = new TileLayer({
   source: new XYZ({
@@ -59,25 +65,22 @@ const satLayer = new TileLayer({
   })
 });
 
+
+//Base Layer von OSM hinzufügen
 const baseLayer = new TileLayer({
   source: new OSM()
 });
-
-//Base Layer von OSM hinzufügen
 map.addLayer(baseLayer);
 
 // Get the base Sat-Button
 const sat = document.getElementById('sat');
 sat.addEventListener('click', function(event) {
-  contr.style.color = 'ffffff';                                 // was bewirkt diese funktion?
+  contr.style.color = 'ffffff';                             ///// Frage von Elio: was bewirkt diese funktion?
   //Anderen Layer entfernen
   map.removeLayer(baseLayer);
   //Satelliten Layer hinzufügen
   map.addLayer(satLayer);
 });
-
-//Zoom-Buttons
-//const zoombuttons = new Zoom(className=zoombuttonoptions);
 
 // Get the base Base-Button
 const base = document.getElementById('base');
@@ -88,6 +91,9 @@ base.addEventListener('click', function(event) {
   map.addLayer(baseLayer);
 });
 
+//Zoom-Buttons
+//const zoombuttons = new Zoom(className=zoombuttonoptions);
+
 //adds a new vectorlayer for the GPS based locationmark
 const GPSmarker = new VectorSource();
 const GPSlayer = new VectorLayer({
@@ -95,66 +101,7 @@ const GPSlayer = new VectorLayer({
 });
 map.addLayer(GPSlayer);
 
-//gets the GPS-Location and accuracy from the browsers geolocation
-//adds point to the layer
-navigator.geolocation.watchPosition(function(pos) {
-  const coords = [pos.coords.longitude, pos.coords.latitude];
-  const accuracy = circular(coords, pos.coords.accuracy);
-  GPSmarker.clear(true);
-  GPSmarker.addFeatures([
-    new Feature(accuracy.transform('EPSG:4326', map.getView().getProjection())),
-    new Feature(new Point(fromLonLat(coords)))
-  ]);
-}, function(error) {
-  alert(`ERROR: ${error.message}`);
-}, {
-  enableHighAccuracy: true
-});
-
-
-// const rbStartingpoint = document.getElementsByName('startingpoint');
-// console.log(rbStartingpoint);
-// let startingpoint = "startingpoint1";
-// const auswahlStartingpoint = document.getElementsByName('startingpoint');
-// console.log('Auswahl' + auswahlStartingpoint);
-
-// for (let x = 0; x < auswahlStartingpoint.length; x++) {
-//   auswahlStartingpoint[x].addEventListener('click', function(event) {
-//     for (let i = 0; i < rbStartingpoint.length; i++) {
-//       if (rbStartingpoint[i].checked) {
-//         startingpoint = rbStartingpoint[i].value;
-//       }
-//     }
-//   });
-// };
-// console.log('der Ausgewählte Startingpoint ist ' + startingpoint);
-
-// Prüft, welcher Radio-Button angewählt ist --> funktioniert nicht
-// function getCheckedRadio(startingpoint) {
-//   for (let i = 0; i < startingpoint.length; i++) {
-//     const button = startingpoint[i];
-//     if (button.checked) {
-//       console.log(button);
-//       return button;
-//     }
-//   }
-//   console.log(startingpoint);
-//   return undefined;
-// }
-
-
-
-// const checkedButton_start = getCheckedRadio(document.startingpoint.name);
-// console.log(document.startingpoint.name);
-// if (checkedButton_start) {
-//   console.log('The value is ' + checkedButton_start.value);
-// } else {
-// console.log('Hat nicht funktioniert!');
-//}
-
-
-
-//Startingpoint Layer 1
+// adds Layer für Startpunkt 1
 const startSource1 = new Vector();
 const startLayer1 = new VectorLayer({
   source: startSource1
@@ -176,7 +123,7 @@ startLayer1.setStyle(new Style({
 startLayer1.setZIndex(100); //Damit die Layer immer zu sehen ist und nicht von anderen Layern verdeckt wird
 map.addLayer(startLayer1);
 
-//Startingpoint Layer 2
+// adds Layer für Startpunkt 2
 const startSource2 = new Vector();
 const startLayer2 = new VectorLayer({
   source: startSource2
@@ -195,37 +142,58 @@ startLayer2.setStyle(new Style({
   })
 }));
 
-startLayer2.setZIndex(100); //Damit der Layer immer zu sehen ist und nicht von anderen Layern verdeckt wird
+startLayer2.setZIndex(101); //Damit der Layer immer zu sehen ist und nicht von anderen Layern verdeckt wird
 map.addLayer(startLayer2);
 
+//////////////////////////
+//gets the GPS-Location and accuracy from the browsers geolocation
+//adds point to the layer
+//////////////////////////
+navigator.geolocation.watchPosition(function(pos) {
+  const coords = [pos.coords.longitude, pos.coords.latitude];
+  const accuracy = circular(coords, pos.coords.accuracy);
+  GPSmarker.clear(true);
+  GPSmarker.addFeatures([
+    new Feature(accuracy.transform('EPSG:4326', map.getView().getProjection())),
+    new Feature(new Point(fromLonLat(coords)))
+  ]);
+}, function(error) {
+  alert(`ERROR: ${error.message}`);
+}, {
+  enableHighAccuracy: true
+});
+
+////////////////////////////
+// Auswahl des Startpunkts über die Radiobuttons steuern
+////////////////////////////
+
 let startSource = startSource1;
+const rbStartingpoint2 = document.getElementById('startingpoint2');
+rbStartingpoint2.addEventListener('click', function() {
+  startSource = startSource2;
+});
 
+const rbStartingpoint1 = document.getElementById('startingpoint1');
+rbStartingpoint1.addEventListener('click', function() {
+  startSource = startSource1;
+});
 
 //////////////////////////////
-// Marker per Klick in Karte
+// Marker per Klick in Karte setzen
 //////////////////////////////
 
-function startByClick(startSource) {
-  // const clickStartSource = startSource;
-  map.on('singleclick', function(e) {
-    const coords = toLonLat(e.coordinate);
-    console.log('StartByClick: ' + startSource + coords);
-    startSource.clear(true);
-    startSource.addFeatures([
-      new Feature(new Point(fromLonLat(coords)))
-    ]);
-  });
-};
-
-function startByClick1(startSource, e) {
-  // const clickStartSource = startSource;
-  const coords = toLonLat(e);
-  console.log('StartByClick1: ' + coords);
+map.on('singleclick', function(e) {
+  const coords = toLonLat(e.coordinate);
   startSource.clear(true);
   startSource.addFeatures([
     new Feature(new Point(fromLonLat(coords)))
   ]);
-};
+  //console.log(startSource);
+  console.log('Koordinaten des Klicks sind: ' + coords);
+
+  // Hier die Koordinaten für den Isochrone-Request übergeben (via funktionsaufruf)?
+
+});
 
 
 //////////////////////////////
@@ -243,7 +211,7 @@ input.addEventListener('keyup', function(event) {
     // Cancel the default action, if needed
     event.preventDefault();
 
-    startSource1.clear(); // Löscht alle features
+    startSource.clear(); // Löscht alle features
     console.log('Input für Suche ist ' + input.value);
 
     xhr.open('GET', 'https://photon.komoot.de/api/?q=' + input.value + ' Wien'); //input eingeben
@@ -253,10 +221,15 @@ input.addEventListener('keyup', function(event) {
         featureProjection: 'EPSG:3857'
       });
       const features = geoJsonReader.readFeatures(json);
-      // console.log(features[0]);
       const feature = features[0];
-      startSource1.addFeature(feature); 
-      console.log('GPS-Position der Adresse suche ist: ' + feature); //Source Hinzufügen
+      startSource.addFeature(feature); //Source Hinzufügen
+      
+      // Defintion der Koordinaten der Adresssuche 
+      const coords = [feature.values_.extent[0], feature.values_.extent[1]];
+      console.log('Koordinaten der Adressesuche sind: ' + coords); 
+
+
+      // wir müssen noch prüfen, ob die Adresssuche ein resultat liefert
 
       // Zoom und Pan auf Suchresultat
       // const ext = feature.getGeometry().getExtent();
@@ -268,50 +241,46 @@ input.addEventListener('keyup', function(event) {
   }
 });
 
-////////////////////////////
-//Versuche, die Auswahl des Ergebnislayers 
-//über die Radiobuttons zu steuern
-////////////////////////////
 
 
-/////Ansatz 1
-// const rbStartingpoint2 = document.getElementById('startingpoint2');
-// rbStartingpoint2.addEventListener('click', function() {
-//   startSource = startSource2;
-//   console.log(startSource);
-//   startByClick(startSource);
-// });
 
+///// Ansatz zur Auswahl, der nicht funktioniert hat
+///// dieser funktioniert momentan nicht, weil der Wechsel 
+///// des Startingpoints nicht dokumentiert wird und immmer auf 2 chekced zurückspringt
 
+// const startSource = startSource1;
 
 // const rbStartingpoint1 = document.getElementById('startingpoint1');
-// rbStartingpoint1.addEventListener('click', function() {
-//   startSource = startSource1;
-//   console.log(startSource);
-//   startByClick(startSource);
+// const rbStartingpoint2 = document.getElementById('startingpoint2');
+
+// console.log(startSource);
+// console.log(rbStartingpoint1.checked);
+
+// map.on('singleclick', function(e) {
+//   if (rbStartingpoint2.checked = true) {
+//     startByClick1(startSource1, e.coordinate);
+//   } else {
+//     startByClick1(startSource1, e.coordinate);
+//   }
 // });
 
-/////Ansatz 2
+// function startByClick1(startSource, e) {
+//   // const clickStartSource = startSource;
+//   const coords = toLonLat(e);
+//   console.log('StartByClick1: ' + coords);
+//   startSource.clear(true);
+//   startSource.addFeatures([
+//     new Feature(new Point(fromLonLat(coords)))
+//   ]);
+// };
 
-const rbStartingpoint1 = document.getElementById('startingpoint1');
-
-console.log(startSource);
-console.log(rbStartingpoint1.checked);
-
-map.on('singleclick', function(e) {
-  if (rbStartingpoint1.checked = true) {
-    startByClick1(startSource1, e.coordinate);
-  } else {
-    startByClick1(startSource2, e.coordinate);
-  }
-});
-
-// sync view of map with the url-hash
-sync(map);
+////////////////////////////
+// GPS-Standort für Auswahl des Startpunkts verwenden
+////////////////////////////
 
 // GPS-Standort in Startingpoint-Layer 1 erzeugen
 document.getElementById('buttonstart1').addEventListener('click', function(event) {
-  navigator.geolocation.watchPosition(function(pos) {
+  navigator.geolocation.getCurrentPosition(function(pos) {
     const coords = [pos.coords.longitude, pos.coords.latitude];
     console.log('GPSposition 1: ' + coords);
     startSource1.clear(true);
@@ -328,7 +297,7 @@ document.getElementById('buttonstart1').addEventListener('click', function(event
 
 // Eintrag am aktuellen Stanodort in Startingpoint-Layer 2 erzeugen
 document.getElementById('buttonstart2').addEventListener('click', function(event) {
-  navigator.geolocation.watchPosition(function(pos) {
+  navigator.geolocation.getCurrentPosition(function(pos) {
     const coords = [pos.coords.longitude, pos.coords.latitude];
     console.log('GPSposition 2: ' + coords);
     startSource2.clear(true);

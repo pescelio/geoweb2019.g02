@@ -28,5 +28,8 @@ function requestIsochrones(coords, mode, range) { //coords, mode, range     Coor
   };
 }
 
+// funktion über export bereitstellen
+export {requestIsochrones};
+
 //Funktionsaufruf um die Abfrage zu starten
 requestIsochrones('[[16.369225,48.198129],[16.357001,48.233942]]', 'cycling-road', 600);
