@@ -41,7 +41,7 @@ import Zoom from 'ol/control/Zoom';
 import {requestIsochrones} from './request.js';
 
 
-const contr = document.getElementById('control')
+const contr = document.getElementById('control');
 
 //init Map
 const map = new Map({
@@ -75,7 +75,7 @@ map.addLayer(baseLayer);
 // Get the base Sat-Button
 const sat = document.getElementById('sat');
 sat.addEventListener('click', function(event) {
-  contr.style.color = 'ffffff';                             ///// Frage von Elio: was bewirkt diese funktion?
+  contr.style.color = 'ffffff';             ///// Frage von Elio: was bewirkt diese funktion?
   //Anderen Layer entfernen
   map.removeLayer(baseLayer);
   //Satelliten Layer hinzufügen
@@ -223,10 +223,9 @@ input.addEventListener('keyup', function(event) {
       const features = geoJsonReader.readFeatures(json);
       const feature = features[0];
       startSource.addFeature(feature); //Source Hinzufügen
-      
-      // Defintion der Koordinaten der Adresssuche 
+      // Defintion der Koordinaten der Adresssuche
       const coords = [feature.values_.extent[0], feature.values_.extent[1]];
-      console.log('Koordinaten der Adressesuche sind: ' + coords); 
+      console.log('Koordinaten der Adressesuche sind: ' + coords);
 
 
       // wir müssen noch prüfen, ob die Adresssuche ein resultat liefert
@@ -242,10 +241,8 @@ input.addEventListener('keyup', function(event) {
 });
 
 
-
-
 ///// Ansatz zur Auswahl, der nicht funktioniert hat
-///// dieser funktioniert momentan nicht, weil der Wechsel 
+///// dieser funktioniert momentan nicht, weil der Wechsel
 ///// des Startingpoints nicht dokumentiert wird und immmer auf 2 chekced zurückspringt
 
 // const startSource = startSource1;
