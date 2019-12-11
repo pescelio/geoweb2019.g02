@@ -1,5 +1,7 @@
 function returnResult(res) {
   //hier muss die weitere Datenverarbeitung bzw. die Kommunikation mit der Datenbank stattfinden
+  console.log(res);
+  map.addLayer(isoLayer);
 }
 
 function requestIsochrones(coords, mode, range) { //coords, mode, range     Coords: "[[lon1,lat1],[lon2,lat2]]", mode: "cycling-road", "foot-walking", "driving-car", range: seconds
@@ -30,6 +32,3 @@ function requestIsochrones(coords, mode, range) { //coords, mode, range     Coor
 
 // funktion über export bereitstellen
 export {requestIsochrones};
-
-//Funktionsaufruf um die Abfrage zu starten
-requestIsochrones('[[16.369225,48.198129],[16.357001,48.233942]]', 'cycling-road', 600);

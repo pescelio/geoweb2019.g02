@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <!-- 
+    <!--
     Die Auswahl der Hintergrundkarte kann/sollte unabhängig der Steuerung der Applikation erfolgen
     Reihenfolge der Steuerung der Applikation aus meiner Sicht
     – Auswahl des Startpunkts 1 oder 2
@@ -30,15 +30,15 @@
         </label><br>
         <p>Auswahl der Mobilität:</p>
         <label class="radio">
-          <input class="rb" id="walk" type="radio" name="mobility" checked>
+          <input class="rb" id="walk" value="foot-walking" type="radio" name="mobility" checked>
           Zu Fuß
         </label><br>
         <label class="radio">
-          <input class="rb" id="bike" type="radio" name="mobility">
+          <input class="rb" id="bike" value="cycling-regular" type="radio" name="mobility">
           Mit dem Fahrrad
         </label><br>
         <label class="radio">
-          <input class="rb" id="car" type="radio" name="mobility">
+          <input class="rb" id="car" value="drving-car" type="radio" name="mobility">
           Mit dem Auto
         </label>
         <p>Art des Treffpunkts:</p>
@@ -50,19 +50,18 @@
         </select>
         <p>Wegzeit</p>
         <label class="radio">
-          <input class="rb" id="tenminutes" type="radio" name="time" checked>
+          <input class="rb" id="tenminutes" value="600" type="radio" name="time" checked>
           10 Minuten
         </label><br>
         <label class="radio">
-          <input class="rb" id="twentyminutes" type="radio" name="time">
+          <input class="rb" id="twentyminutes" value="1200" type="radio" name="time">
           20 Minuten
         </label><br>
         <label class="radio">
-          <input class="rb" id="thirtyminutes" type="radio" name="time">
+          <input class="rb" id="thirtyminutes" value="1800" type="radio" name="time">
           30 Minuten
         </label><br>
         <p>Auswahl Startpunkt</p>
-        <!-- <form name="startingpoint"> -->
         <label class="radio">
           <input class="rb" id="startingpoint1" type="radio" name="startingpoint" value="startingpoint1" checked>
           Startpunkt 1 <button id="buttonstart1">Aktuelle Position wählen</button>
@@ -70,8 +69,8 @@
         <label class="radio">
             <input class="rb" id="startingpoint2" type="radio" name="startingpoint" value="startingpoint2">
             Startpunkt 2 <button id="buttonstart2">Aktuelle Position wählen</button>
-        </label>
-      <!-- </form> -->
+        </label><br>
+        <button type="button" name="go-button" id="go-button">GO!</button>
       </div>
     </div>
 
