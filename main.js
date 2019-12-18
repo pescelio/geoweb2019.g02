@@ -325,19 +325,12 @@ go.addEventListener('click', function(event) {
   let coord_value = [coords1, coords2];
   let coord_str = JSON.stringify(coord_value);
   console.log("STRINGIFY: " + coord_str);
-  console.log(coord_value);
 
   requestIsochrones(coord_str, mode_value, time_value);
   //'[[16.369225,48.198129],[16.357001,48.233942]]'
 });
 
-// adds Layer für Isochrone
-const isoSource = new VectorSource({
-  features: (new GeoJSON()).readFeatures({"type":"FeatureCollection","bbox":[16.347938,48.204282,16.38719,48.231928],"features":[{"type":"Feature","properties":{"group_index":0,"value":600.0,"center":[16.377293932526754,48.22561621954702]},"geometry":{"coordinates":[[[16.368497,48.226895],[16.368694,48.225685],[16.368811,48.225345],[16.370881,48.221256],[16.371108,48.220977],[16.375467,48.220135],[16.379525,48.219917],[16.384031,48.221213],[16.384207,48.221262],[16.384254,48.221283],[16.387021,48.224338],[16.387057,48.224415],[16.38719,48.22475],[16.387048,48.227159],[16.386881,48.227479],[16.381286,48.228871],[16.37926,48.230739],[16.379124,48.230908],[16.37899,48.231075],[16.378785,48.231338],[16.378579,48.231601],[16.376429,48.231928],[16.374677,48.231315],[16.373005,48.230603],[16.37024,48.229086],[16.36969,48.228592],[16.368497,48.226895]]],"type":"Polygon"}},{"type":"Feature","properties":{"group_index":1,"value":600.0,"center":[16.35735146245483,48.21094612650178]},"geometry":{"coordinates":[[[16.347938,48.211851],[16.348047,48.209527],[16.349293,48.207766],[16.351317,48.206142],[16.353017,48.205405],[16.353576,48.205195],[16.356658,48.204282],[16.35858,48.204531],[16.361701,48.205228],[16.363279,48.206414],[16.363914,48.207059],[16.364131,48.207346],[16.36576,48.211712],[16.365467,48.213708],[16.36531,48.214169],[16.365145,48.214489],[16.363883,48.21567],[16.362568,48.216921],[16.359776,48.217644],[16.35876,48.217818],[16.357796,48.217785],[16.356316,48.217688],[16.351155,48.215098],[16.347973,48.21221],[16.347938,48.211851]]],"type":"Polygon"}}],"metadata":{"attribution":"openrouteservice.org | OpenStreetMap contributors","service":"isochrones","timestamp":1576077905711,"query":{"locations":[[16.37729098629565,48.22563566262315],[16.35734243878096,48.210947314177616]],"location_type":"start","range":[600.0],"range_type":"time","intersections":false},"engine":{"version":"5.0.2","build_date":"2019-11-14T09:52:07Z"}}})
-});
-const isoLayer = new VectorLayer({
-  source: isoSource
-});
+
 
 // isoLayer.setStyle(new Style({
 //   image: new Circle({
@@ -353,20 +346,42 @@ const isoLayer = new VectorLayer({
 // }));
 
 
+// adds Layer für Isochrone
+const isoSource = new Vector(
+  // {features: new GeoJSON({featureProjection: 'EPSG:3857'}).readFeatures(res)}
+);
 
-isoLayer.setZIndex(1000); //Damit der Layer immer zu sehen ist und nicht von anderen Layern verdeckt wird
+const isoLayer = new VectorLayer({
+  source: isoSource
+});
+
+isoLayer.setZIndex(50); //Damit der Layer immer zu sehen ist und nicht von anderen Layern verdeckt wird
 map.addLayer(isoLayer);
 
+isoLayer.setStyle(new Style({
+  fill: new Fill({
+    color: 'rgba(0,0,255,0.4)'
+  }),
+  stroke: new Stroke({
+    color: '#ff0000',
+    width: 10
+  })
+}));
+
 function returnResult(res) {
-  // isoSource.clear(true);
-  //
-  //
-  // isoSource.addFeatures([
-  //   new GeoJSON().readFeatures(res)
-  // ]);
+  
+  isoSource.clear(true);
+  
+  console.log(res);
+
+  // const test_coords = [16.372, 48.209];
+
+  isoSource.addFeatures(
+    new GeoJSON({featureProjection: 'EPSG:3857'}).readFeatures(res)
+  );
 
   //hier muss die weitere Datenverarbeitung bzw. die Kommunikation mit der Datenbank stattfinden
-  console.log(res);
+  
 }
 
 function requestIsochrones(coords, mode, range) { //coords, mode, range     Coords: "[[lon1,lat1],[lon2,lat2]]", mode: "cycling-road", "foot-walking", "driving-car", range: seconds
