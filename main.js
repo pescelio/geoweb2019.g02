@@ -38,8 +38,8 @@ import {circular} from 'ol/geom/Polygon';
 import Zoom from 'ol/control/Zoom';
 
 // jQuery
-import $ from 'jQuery';
-window.jQuery = window.$ = $;
+// import $ from 'jQuery';
+// window.jQuery = window.$ = $;
 
 // $(selector).hide();
 
@@ -346,11 +346,11 @@ map.addLayer(isoLayer);
 
 isoLayer.setStyle(new Style({
   fill: new Fill({
-    color: 'rgba(0,0,255,0.4)'
+    color: 'rgba(128,0,255,0.4)'
   }),
   stroke: new Stroke({
     color: '#ff0000',
-    width: 10
+    width: 1.25
   })
 }));
 
@@ -365,12 +365,27 @@ function returnResult(res) {
   );
 
   //hier muss die weitere Datenverarbeitung bzw. die Kommunikation mit der Datenbank stattfinden
-  $.ajax({
-    type: 'POST',
-    url: 'iso.php',
-    data: {json: JSON.stringify(json_data)},
-    dataType: 'json'
-  });
+
+  const requestDB = new XMLHttpRequest();
+  requestDB.open('POST', 'iso.php', true);
+  requestDB.setRequestHeader('Content-Type', 'application/json');
+  requestDB.send(res);
+
+  requestDB.onreadystatechange = function() {
+    console.log('Status: ' + this.status);
+
+    if (this.readyState === 4) {
+      // console.log('Headers:', this.getAllResponseHeaders());
+      console.log('this.responseText: ' + this.responseText);
+    }
+  };
+
+  // $.ajax({
+  //   type: 'POST',
+  //   url: 'iso.php',
+  //   data: {json: JSON.stringify(res)},
+  //   dataType: 'json'
+  // });
 }
 
 function requestIsochrones(coords, mode, range) { //coords, mode, range     Coords: "[[lon1,lat1],[lon2,lat2]]", mode: "cycling-road", "foot-walking", "driving-car", range: seconds
