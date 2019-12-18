@@ -37,7 +37,11 @@ import {circular} from 'ol/geom/Polygon';
 //control
 import Zoom from 'ol/control/Zoom';
 
-const contr = document.getElementById('control');
+// jQuery
+import $ from 'jQuery';
+window.jQuery = window.$ = $;
+
+// $(selector).hide();
 
 //init Map
 const map = new Map({
@@ -71,7 +75,6 @@ map.addLayer(baseLayer);
 // Get the base Sat-Button
 const sat = document.getElementById('sat');
 sat.addEventListener('click', function(event) {
-  contr.style.color = 'ffffff';             ///// Frage von Elio: was bewirkt diese funktion?
   //Anderen Layer entfernen
   map.removeLayer(baseLayer);
   //Satelliten Layer hinzufügen
@@ -164,7 +167,7 @@ navigator.geolocation.watchPosition(function(pos) {
 ////////////////////////////
 // Auswahl der Modlität
 ////////////////////////////
-const modes = document.getElementsByName('mobility')
+const modes = document.getElementsByName('mobility');
 let mode_value = 'foot-walking';
 for (let i = 0; i < modes.length; i++) {
   modes[i].addEventListener('click', function() {
@@ -190,7 +193,6 @@ for (let i = 0; i < times.length; i++) {
     }
   });
 }
-
 
 let coords1 = [];
 let coords2 = [];
@@ -322,29 +324,13 @@ document.getElementById('buttonstart2').addEventListener('click', function(event
 const go = document.getElementById('go-button');
 go.addEventListener('click', function(event) {
   //Funktionsaufruf um die Abfrage zu starten
-  let coord_value = [coords1, coords2];
-  let coord_str = JSON.stringify(coord_value);
-  console.log("STRINGIFY: " + coord_str);
+  const coord_value = [coords1, coords2];
+  const coord_str = JSON.stringify(coord_value);
+  console.log('STRINGIFY: ' + coord_str);
 
   requestIsochrones(coord_str, mode_value, time_value);
   //'[[16.369225,48.198129],[16.357001,48.233942]]'
 });
-
-
-
-// isoLayer.setStyle(new Style({
-//   image: new Circle({
-//     fill: new Fill({
-//       color: 'rgba(0,255,0,0.4)'
-//     }),
-//     stroke: new Stroke({
-//       color: '#00ff00',
-//       width: 1.25
-//     }),
-//     radius: 15
-//   })
-// }));
-
 
 // adds Layer für Isochrone
 const isoSource = new Vector(
@@ -369,9 +355,7 @@ isoLayer.setStyle(new Style({
 }));
 
 function returnResult(res) {
-  
   isoSource.clear(true);
-  
   console.log(res);
 
   // const test_coords = [16.372, 48.209];
@@ -381,7 +365,12 @@ function returnResult(res) {
   );
 
   //hier muss die weitere Datenverarbeitung bzw. die Kommunikation mit der Datenbank stattfinden
-  
+  $.ajax({
+    type: 'POST',
+    url: 'iso.php',
+    data: {json: JSON.stringify(json_data)},
+    dataType: 'json'
+  });
 }
 
 function requestIsochrones(coords, mode, range) { //coords, mode, range     Coords: "[[lon1,lat1],[lon2,lat2]]", mode: "cycling-road", "foot-walking", "driving-car", range: seconds
