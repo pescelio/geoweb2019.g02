@@ -365,14 +365,14 @@ function returnResult(res) {
   );
 
   //hier muss die weitere Datenverarbeitung bzw. die Kommunikation mit der Datenbank stattfinden
-  const res_php = 'res_php=' + res; // JSON.stringify(res);
+  const res_ueb = 'res_ueb=' + res; // JSON.stringify(res);
 
-  console.log(res_php);
+  console.log(res_ueb);
 
   const requestDB = new XMLHttpRequest();
   requestDB.open('POST', 'iso.php', true);
   requestDB.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'); //application/json text/plain
-  requestDB.send(res_php);
+  requestDB.send(res_ueb);
 
   requestDB.onreadystatechange = function() {
     console.log('Status: ' + this.status);

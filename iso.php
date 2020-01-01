@@ -12,14 +12,16 @@
 
   // echo"<br />";
   // variable aus js 
-  $php_iso = $_POST['res_php'];
+  $php_iso = $_POST['res_ueb'];
   echo 'inhalt des übergebenen Arrays: ';
+
   print_r ($php_iso);
 
-  echo "<------------------------------------------------------------------->";
-
-  $php_iso = json_decode($php_iso);
-  echo 'JSON-Decode: ' . $php_iso;
+  
+  //echo "<------------------------------------------------------------------->";
+  //$php_iso = json_decode($php_iso);
+  // echo 'JSON-Decode: ';
+  // echo $php_iso;
 
   // function console_log($php_iso, $with_script_tags = true) {
   //   $js_code = 'console.log(' . json_encode($php_iso, JSON_HEX_TAG) . 
