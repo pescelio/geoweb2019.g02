@@ -37,7 +37,7 @@ import {circular} from 'ol/geom/Polygon';
 //control
 import Zoom from 'ol/control/Zoom';
 
-// jQuery
+// // jQuery
 // import $ from 'jQuery';
 // window.jQuery = window.$ = $;
 
@@ -365,11 +365,14 @@ function returnResult(res) {
   );
 
   //hier muss die weitere Datenverarbeitung bzw. die Kommunikation mit der Datenbank stattfinden
+  const res_ueb = 'res_ueb=' + res; // JSON.stringify(res);
+
+  console.log(res_ueb);
 
   const requestDB = new XMLHttpRequest();
   requestDB.open('POST', 'iso.php', true);
-  requestDB.setRequestHeader('Content-Type', 'application/json');
-  requestDB.send(res);
+  requestDB.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'); //application/json text/plain
+  requestDB.send(res_ueb);
 
   requestDB.onreadystatechange = function() {
     console.log('Status: ' + this.status);
@@ -381,9 +384,9 @@ function returnResult(res) {
   };
 
   // $.ajax({
-  //   type: 'POST',
   //   url: 'iso.php',
-  //   data: {json: JSON.stringify(res)},
+  //   type: 'POST',
+  //   data: {res_str: JSON.stringify(res)},
   //   dataType: 'json'
   // });
 }
