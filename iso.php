@@ -11,13 +11,24 @@
   
 
   // echo"<br />";
+
+
   // variable aus js 
   $php_iso = $_POST['res_ueb'];
   echo 'inhalt des übergebenen Arrays: ';
 
   print_r ($php_iso);
 
-  
+  // damit jeweils die richtigen Einträge bentutzt werden, 
+  // sollten wir wohl noch eine Laufnummer oder etwas ähnliches erzeugen
+  // alternativ könnte evt. auch der wert des Timestamps in den Metadaten verwendet werden
+  // (was aber potenziell falsche lösungen ergeben könnte (genau gleichzeitige Anfragen))
+  // der Timestamp müsste zusätzlich als separater Wert in die Datenbank geschrieben werden
+
+  // Zudem muss die Art des Treffpunkts hier ebenfalls noch übergeben werden
+
+
+  // Diese Abschnitte sind nicht notwendig, da das JSON anscheinend schon im richtigen Format übergeben wird
   //echo "<------------------------------------------------------------------->";
   //$php_iso = json_decode($php_iso);
   // echo 'JSON-Decode: ';
@@ -46,7 +57,13 @@
     FROM data
   ) AS f)";
 
+
+
   $result = pg_query($db,$insert) or die ('Fehler bei Speichern: '.pg_last_error($db));
+
+  // Hier müssen die Isochrone verschnitten werden
+  // und die Abfrage der Amenities gemacht werden
+
 
   // Datenbank schliessen
   include 'geoweb_pg_close.php';

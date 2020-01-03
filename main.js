@@ -144,6 +144,25 @@ startLayer2.setStyle(new Style({
 startLayer2.setZIndex(101); //Damit der Layer immer zu sehen ist und nicht von anderen Layern verdeckt wird
 map.addLayer(startLayer2);
 
+// adds Layer für Isochrone
+const isoSource = new Vector();
+
+const isoLayer = new VectorLayer({
+  source: isoSource
+});
+
+isoLayer.setZIndex(50); 
+map.addLayer(isoLayer);
+
+isoLayer.setStyle(new Style({
+  fill: new Fill({
+    color: 'rgba(128,0,255,0.4)'
+  }),
+  stroke: new Stroke({
+    color: '#ff0000',
+    width: 1.25
+  })
+}));
 
 //////////////////////////
 //gets the GPS-Location and accuracy from the browsers geolocation
@@ -319,8 +338,9 @@ document.getElementById('buttonstart2').addEventListener('click', function(event
   });
 });
 
-
+/////////////////
 // Get the go-Button
+/////////////////
 const go = document.getElementById('go-button');
 go.addEventListener('click', function(event) {
   //Funktionsaufruf um die Abfrage zu starten
@@ -332,27 +352,15 @@ go.addEventListener('click', function(event) {
   //'[[16.369225,48.198129],[16.357001,48.233942]]'
 });
 
-// adds Layer für Isochrone
-const isoSource = new Vector(
-  // {features: new GeoJSON({featureProjection: 'EPSG:3857'}).readFeatures(res)}
-);
+///////////////////
+// Fügt die Isochrone zum Isochronen-Layer hinzu
+// übergibt die Isochrone und weitere Infos an den Server
+///////////////////
 
-const isoLayer = new VectorLayer({
-  source: isoSource
-});
-
-isoLayer.setZIndex(50); //Damit der Layer immer zu sehen ist und nicht von anderen Layern verdeckt wird
-map.addLayer(isoLayer);
-
-isoLayer.setStyle(new Style({
-  fill: new Fill({
-    color: 'rgba(128,0,255,0.4)'
-  }),
-  stroke: new Stroke({
-    color: '#ff0000',
-    width: 1.25
-  })
-}));
+///////////////////////////////////////////////////////
+///////////HIER IST EINE ERGÄNZUNG NOTWENDIG////////////
+// die Art des Treffpunkts muss auch noch mit übergeben werden
+// allenfalls auch die laufnummer o.ä.
 
 function returnResult(res) {
   isoSource.clear(true);
@@ -371,7 +379,7 @@ function returnResult(res) {
 
   const requestDB = new XMLHttpRequest();
   requestDB.open('POST', 'iso.php', true);
-  requestDB.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'); //application/json text/plain
+  requestDB.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'); //In diesem Format werden die Werte in der gleichen Form übergeben wir in der URL in der GET-Methode
   requestDB.send(res_ueb);
 
   requestDB.onreadystatechange = function() {
@@ -391,9 +399,12 @@ function returnResult(res) {
   // });
 }
 
-function requestIsochrones(coords, mode, range) { //coords, mode, range     Coords: "[[lon1,lat1],[lon2,lat2]]", mode: "cycling-road", "foot-walking", "driving-car", range: seconds
-  //Funktion, die einen Request an Openrouteservice sendet, um Isochrone zu den übergebenen Koordinaten abzufragen
-  //gibt Isochrone an die Funktion returnResult() weiter, welche dann die Kommunikation mit der Datenbank übernimmt
+///////////////////
+//Funktion, die einen Request an Openrouteservice sendet, um Isochrone zu den übergebenen Koordinaten abzufragen
+//gibt Isochrone an die Funktion returnResult() weiter, welche dann die Kommunikation mit der Datenbank übernimmt
+///////////////////
+function requestIsochrones(coords, mode, range) {
+  //coords, mode, range     Coords: "[[lon1,lat1],[lon2,lat2]]", mode: "cycling-road", "foot-walking", "driving-car", range: seconds
 
   const request = new XMLHttpRequest();
 
