@@ -15,9 +15,10 @@
 
   // variable aus js 
   $php_iso = $_POST['res_ueb'];
-  echo 'inhalt des übergebenen Arrays: ';
+  
+  echo $php_iso;
 
-  print_r ($php_iso);
+  
 
   // damit jeweils die richtigen Einträge bentutzt werden, 
   // sollten wir wohl noch eine Laufnummer oder etwas ähnliches erzeugen
@@ -60,6 +61,7 @@
 
 
   $result = pg_query($db,$insert) or die ('Fehler bei Speichern: '.pg_last_error($db));
+  echo $result;
 
   // Hier müssen die Isochrone verschnitten werden
   // und die Abfrage der Amenities gemacht werden
@@ -67,5 +69,6 @@
 
   // Datenbank schliessen
   include 'geoweb_pg_close.php';
+  echo "Die Datenbank wurde geschlossen";
 
   ?>
