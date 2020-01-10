@@ -71,7 +71,7 @@ const satLayer = new TileLayer({
 //Base Layer von OSM hinzufügen
 const baseLayer = new TileLayer({
   source: new Stamen({
-    layer: 'watercolor'
+    layer: 'toner-lite'
   })
 });
 map.addLayer(baseLayer);
