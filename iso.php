@@ -18,7 +18,13 @@
   
   echo $php_iso;
 
-  
+  echo "<----------->";
+
+  $php_iso = $_POST['poiCat'];
+
+  echo $poiCat;
+
+  echo "<----------->";
 
   // damit jeweils die richtigen Einträge bentutzt werden, 
   // sollten wir wohl noch eine Laufnummer oder etwas ähnliches erzeugen
