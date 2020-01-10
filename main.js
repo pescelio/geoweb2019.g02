@@ -145,17 +145,6 @@ startLayer2.setStyle(new Style({
   })
 }));
 
-// startLayer2.setStyle(new Style({
-//   image: new Icon({
-//     anchor: [0.5, 30],
-//     scale: 0.6,
-//     anchorXUnits: 'fraction',
-//     anchorYUnits: 'pixels',
-//     src: 'icons/cafe.png'
-//   })
-// }));
-
-
 startLayer2.setZIndex(101); //Damit der Layer immer zu sehen ist und nicht von anderen Layern verdeckt wird
 map.addLayer(startLayer2);
 
@@ -178,6 +167,18 @@ isoLayer.setStyle(new Style({
     width: 1.25
   })
 }));
+
+// add Layer for POIs
+
+const poiSource = new Vector();
+
+const poiLayer = new VectorLayer({
+  source: poiSource
+});
+
+poiLayer.setZIndex(150);
+map.addLayer(poiLayer);
+
 
 //////////////////////////
 //gets the GPS-Location and accuracy from the browsers geolocation
@@ -217,8 +218,8 @@ for (let i = 0; i < modes.length; i++) {
 // Auswahl der Treffpunkt-Kategorie
 ////////////////////////////
 const poiCat = document.getElementsByName('poiCat');
-let poiCat_value = 'restaurant';
-for (let i = 0; i < modes.length; i++) {
+let poiCat_value = 'restaurants';
+for (let i = 0; i < poiCat.length; i++) {
   poiCat[i].addEventListener('click', function() {
     for (let i = 0; i < poiCat.length; i++) {
       if (poiCat[i].checked) {
@@ -412,16 +413,33 @@ function returnResult(res) {
 
     if (this.readyState === 4) {
       // console.log('Headers:', this.getAllResponseHeaders());
-      console.log('this.responseText: ' + this.responseText);
+      const responseText = this.responseText;
+      console.log(responseText);
+      const response = JSON.parse(responseText);
+      console.log(response);
+
+      const POI = response.jsonb_build_object;
+      console.log('response ' + POI);
+
+      poiLayer.setStyle(new Style({
+        image: new Icon({
+          anchor: [0.5, 30],
+          scale: 0.6,
+          anchorXUnits: 'fraction',
+          anchorYUnits: 'pixels',
+          src: 'icons/' + poiCat_value + '.png'
+        })
+      }));
+      
+      poiSource.clear(true);
+      poiSource.addFeatures(
+        new GeoJSON({featureProjection: 'EPSG:3857'}).readFeatures(POI)
+      );
+
+      // console.log('Stringify: ' + JSON.stringify(response));
     }
   };
 
-  // $.ajax({
-  //   url: 'iso.php',
-  //   type: 'POST',
-  //   data: {res_str: JSON.stringify(res)},
-  //   dataType: 'json'
-  // });
 }
 
 ///////////////////
