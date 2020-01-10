@@ -6,13 +6,6 @@
 
   echo "<------------------------------------------------------------------>";
 
-  
-  // $php_iso = json_decode($_POST['res_str']);
-  
-
-  // echo"<br />";
-
-
   // variable aus js 
   $php_iso = $_POST['res_ueb'];
   
@@ -25,14 +18,6 @@
   echo $poiCat;
 
   echo "<----------->";
-
-  // damit jeweils die richtigen Einträge bentutzt werden, 
-  // sollten wir wohl noch eine Laufnummer oder etwas ähnliches erzeugen
-  // alternativ könnte evt. auch der wert des Timestamps in den Metadaten verwendet werden
-  // (was aber potenziell falsche lösungen ergeben könnte (genau gleichzeitige Anfragen))
-  // der Timestamp müsste zusätzlich als separater Wert in die Datenbank geschrieben werden
-
-  // Zudem muss die Art des Treffpunkts hier ebenfalls noch übergeben werden
 
 
   // Diese Abschnitte sind nicht notwendig, da das JSON anscheinend schon im richtigen Format übergeben wird
