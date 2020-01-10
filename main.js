@@ -113,13 +113,13 @@ const startLayer1 = new VectorLayer({
 startLayer1.setStyle(new Style({
   image: new Circle({
     fill: new Fill({
-      color: 'rgba(255,0,0,0.4)'
+      color: '#FFDE00'
     }),
     stroke: new Stroke({
       color: '#ff0000',
-      width: 1.25
+      width: 1
     }),
-    radius: 15
+    radius: 7
   })
 }));
 
@@ -135,13 +135,13 @@ const startLayer2 = new VectorLayer({
 startLayer2.setStyle(new Style({
   image: new Circle({
     fill: new Fill({
-      color: 'rgba(0,255,0,0.4)'
+      color: '#FFDE00'
     }),
     stroke: new Stroke({
-      color: '#00ff00',
-      width: 1.25
+      color: '#ff0000',
+      width: 1
     }),
-    radius: 15
+    radius: 7
   })
 }));
 
@@ -160,10 +160,10 @@ map.addLayer(isoLayer);
 
 isoLayer.setStyle(new Style({
   fill: new Fill({
-    color: 'rgba(128,0,255,0.4)'
+    color: 'rgba(235, 91, 12, 0.2)'
   }),
   stroke: new Stroke({
-    color: '#ff0000',
+    color: 'rgba(235, 91, 12, 1 )',
     width: 1.25
   })
 }));

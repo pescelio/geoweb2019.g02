@@ -23,18 +23,21 @@
          /* left: 200px; */
          /* height: 30px; */
       }
+      /* .ol-unselectable {
+        z-index: 10000;
+      } */
     </style>
     <img src="images/logo.svg" alt="Logo" id="logo">
     <form class="radio" id="layerControl">
       <input class="rb" id="base" type="radio" name="radio-group" checked />
-      <label class="radio">Base-Layer OSM</label>
+      <label class="radio">Toner Lite</label>
       <br>
       <input type="radio" name="radio-group" id="sat" class="rb"     />
-      <label class="radio">Sattelit</label>
+      <label class="radio">Satellit</label>
       <br>
     </form>
     <div class="controlWrapper">
-      <input type="text" id="search" placeholder="Suche..." />
+      <input type="text" id="search" placeholder="Adress-Suche..." />
       <br>
       <form class="radio">
         <p>Auswahl Startpunkt</p>
@@ -61,16 +64,16 @@
 
 
         <p>Art des Treffpunkts</p>
-        <input class="rb" id="restaurant" value="restaurant" type="radio" name="poi" checked />
+        <input class="rb" id="restaurant" value="restaurant" type="radio" name="poiCat" checked />
         <label class="radio">Restaurant</label>
         <br>
-        <input class="rb" id="cafe" value="cafe" type="radio" name="poi" />
+        <input class="rb" id="cafe" value="cafe" type="radio" name="poiCat" />
         <label class="radio">Cafe</label>
         <br>
-        <input class="rb" id="bar" value="restaurant" type="radio" name="poi" />
+        <input class="rb" id="bar" value="restaurant" type="radio" name="poiCat" />
         <label class="radio">Bar</label>
         <br>
-        <input class="rb" id="park" value="restaurant" type="radio" name="poi" />
+        <input class="rb" id="park" value="restaurant" type="radio" name="poiCat" />
         <label class="radio">Park</label>
         <br>
 
