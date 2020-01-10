@@ -22,7 +22,7 @@ import Stamen from 'ol/source/Stamen';
 import GeoJSON from 'ol/format/GeoJSON';
 
 //Style
-import Style from 'ol/style/Style';
+import {Icon, Style} from 'ol/style';
 import Text from 'ol/style/Text';
 import Stroke from 'ol/style/Stroke';
 import Circle from 'ol/style/Circle';
@@ -102,19 +102,6 @@ const GPSmarker = new VectorSource();
 const GPSlayer = new VectorLayer({
   source: GPSmarker
 });
-
-GPSlayer.setStyle(new Style({
-  image: new Circle({
-    fill: new Fill({
-      color: '#6894a9'
-    }),
-    stroke: new Stroke({
-      color: '#6894a9',
-      width: 2.5
-    }),
-    radius: 7
-  })
-}));
 map.addLayer(GPSlayer);
 
 // adds Layer für Startpunkt 1
@@ -123,20 +110,18 @@ const startLayer1 = new VectorLayer({
   source: startSource1
 });
 
-const startPointStyle = new Style({
+startLayer1.setStyle(new Style({
   image: new Circle({
     fill: new Fill({
       color: '#FFDE00'
     }),
     stroke: new Stroke({
       color: '#ff0000',
-      width: 2.5
+      width: 1
     }),
     radius: 7
   })
-});
-
-startLayer1.setStyle(startPointStyle);
+}));
 
 startLayer1.setZIndex(100); //Damit die Layer immer zu sehen ist und nicht von anderen Layern verdeckt wird
 map.addLayer(startLayer1);
@@ -147,7 +132,29 @@ const startLayer2 = new VectorLayer({
   source: startSource2
 });
 
-startLayer2.setStyle(startPointStyle);
+startLayer2.setStyle(new Style({
+  image: new Circle({
+    fill: new Fill({
+      color: '#FFDE00'
+    }),
+    stroke: new Stroke({
+      color: '#ff0000',
+      width: 1
+    }),
+    radius: 7
+  })
+}));
+
+// startLayer2.setStyle(new Style({
+//   image: new Icon({
+//     anchor: [0.5, 30],
+//     scale: 0.6,
+//     anchorXUnits: 'fraction',
+//     anchorYUnits: 'pixels',
+//     src: 'icons/cafe.png'
+//   })
+// }));
+
 
 startLayer2.setZIndex(101); //Damit der Layer immer zu sehen ist und nicht von anderen Layern verdeckt wird
 map.addLayer(startLayer2);
@@ -181,7 +188,7 @@ navigator.geolocation.watchPosition(function(pos) {
   const accuracy = circular(coords, pos.coords.accuracy);
   GPSmarker.clear(true);
   GPSmarker.addFeatures([
-    // new Feature(accuracy.transform('EPSG:4326', map.getView().getProjection())),
+    new Feature(accuracy.transform('EPSG:4326', map.getView().getProjection())),
     new Feature(new Point(fromLonLat(coords)))
   ]);
 }, function(error) {
