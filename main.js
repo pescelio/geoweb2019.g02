@@ -383,7 +383,7 @@ function returnResult(res) {
   );
 
   //hier muss die weitere Datenverarbeitung bzw. die Kommunikation mit der Datenbank stattfinden
-  const res_ueb = 'res_ueb=' + res + '&poiCat=' + poiCat; // JSON.stringify(res);
+  const res_ueb = 'res_ueb=' + res + '&poiCat=' + poiCat_value; // JSON.stringify(res);
 
   // console.log(res_ueb);
 
