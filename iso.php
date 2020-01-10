@@ -6,8 +6,8 @@
   // variable aus js 
   $php_iso = $_POST['res_ueb'];
 
-  //$poiCat = $_POST['poiCat'];
-  $poiCat = "restaurants";
+  $poiCat = $_POST['poiCat'];
+  //$poiCat = "restaurants";
   // echo $poiCat;
 
   //echo "<----------->";
