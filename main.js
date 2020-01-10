@@ -145,17 +145,6 @@ startLayer2.setStyle(new Style({
   })
 }));
 
-// startLayer2.setStyle(new Style({
-//   image: new Icon({
-//     anchor: [0.5, 30],
-//     scale: 0.6,
-//     anchorXUnits: 'fraction',
-//     anchorYUnits: 'pixels',
-//     src: 'icons/cafe.png'
-//   })
-// }));
-
-
 startLayer2.setZIndex(101); //Damit der Layer immer zu sehen ist und nicht von anderen Layern verdeckt wird
 map.addLayer(startLayer2);
 
@@ -179,6 +168,8 @@ isoLayer.setStyle(new Style({
   })
 }));
 
+// add Layer for POIs
+
 const poiSource = new Vector();
 
 const poiLayer = new VectorLayer({
@@ -187,6 +178,16 @@ const poiLayer = new VectorLayer({
 
 poiLayer.setZIndex(150);
 map.addLayer(poiLayer);
+
+poiLayer.setStyle(new Style({
+  image: new Icon({
+    anchor: [0.5, 30],
+    scale: 0.6,
+    anchorXUnits: 'fraction',
+    anchorYUnits: 'pixels',
+    src: 'icons/cafe.png'
+  })
+}));
 
 //////////////////////////
 //gets the GPS-Location and accuracy from the browsers geolocation
@@ -226,8 +227,8 @@ for (let i = 0; i < modes.length; i++) {
 // Auswahl der Treffpunkt-Kategorie
 ////////////////////////////
 const poiCat = document.getElementsByName('poiCat');
-let poiCat_value = 'restaurant';
-for (let i = 0; i < modes.length; i++) {
+let poiCat_value = 'restaurants';
+for (let i = 0; i < poiCat.length; i++) {
   poiCat[i].addEventListener('click', function() {
     for (let i = 0; i < poiCat.length; i++) {
       if (poiCat[i].checked) {
@@ -421,12 +422,13 @@ function returnResult(res) {
 
     if (this.readyState === 4) {
       // console.log('Headers:', this.getAllResponseHeaders());
-      const response = JSON.parse(this.responseText);
+      const responseText = this.responseText;
+      const response = JSON.parse(responseText);
       console.log('parse ' + response);
 
       const POI = response.jsonb_build_object;
       console.log('response ' + POI);
-
+      poiSource.clear(true);
       poiSource.addFeatures(
         new GeoJSON({featureProjection: 'EPSG:3857'}).readFeatures(POI)
       );
