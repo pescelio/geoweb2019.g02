@@ -151,7 +151,7 @@ const isoLayer = new VectorLayer({
   source: isoSource
 });
 
-isoLayer.setZIndex(50); 
+isoLayer.setZIndex(50);
 map.addLayer(isoLayer);
 
 isoLayer.setStyle(new Style({
@@ -184,7 +184,7 @@ navigator.geolocation.watchPosition(function(pos) {
 
 
 ////////////////////////////
-// Auswahl der Modlität
+// Auswahl der Modalität
 ////////////////////////////
 const modes = document.getElementsByName('mobility');
 let mode_value = 'foot-walking';
@@ -193,6 +193,21 @@ for (let i = 0; i < modes.length; i++) {
     for (let i = 0; i < modes.length; i++) {
       if (modes[i].checked) {
         mode_value = modes[i].value;
+      }
+    }
+  });
+}
+
+////////////////////////////
+// Auswahl der Treffpunkt-Kategorie
+////////////////////////////
+const poiCat = document.getElementsByName('poiCat');
+let poiCat_value = 'restaurant';
+for (let i = 0; i < modes.length; i++) {
+  poiCat[i].addEventListener('click', function() {
+    for (let i = 0; i < poiCat.length; i++) {
+      if (poiCat[i].checked) {
+        poiCat_value = poiCat[i].value;
       }
     }
   });
@@ -247,7 +262,7 @@ map.on('singleclick', function(e) {
     new Feature(new Point(fromLonLat(coords)))
   ]);
   //console.log(startSource);
-  console.log('Koordinaten des Klicks sind: ' + coords);
+  // console.log('Koordinaten des Klicks sind: ' + coords);
   // Hier die Koordinaten für den Isochrone-Request übergeben (via funktionsaufruf)?
 
 });
@@ -269,7 +284,7 @@ input.addEventListener('keyup', function(event) {
     event.preventDefault();
 
     startSource.clear(); // Löscht alle features
-    console.log('Input für Suche ist ' + input.value);
+    // console.log('Input für Suche ist ' + input.value);
 
     xhr.open('GET', 'https://photon.komoot.de/api/?q=' + input.value + ' Wien'); //input eingeben
     xhr.onload = function() {
@@ -288,7 +303,7 @@ input.addEventListener('keyup', function(event) {
         coords2 = coords;
       }
 
-      console.log('Koordinaten der Adressesuche sind: ' + coords);
+      // console.log('Koordinaten der Adressesuche sind: ' + coords);
 
 
       // wir müssen noch prüfen, ob die Adresssuche ein resultat liefert
@@ -308,7 +323,7 @@ document.getElementById('buttonstart1').addEventListener('click', function(event
   navigator.geolocation.getCurrentPosition(function(pos) {
     const coords = [pos.coords.longitude, pos.coords.latitude];
     coords1 = coords;
-    console.log('GPSposition 1: ' + coords);
+    // console.log('GPSposition 1: ' + coords);
     startSource1.clear(true);
     startSource1.addFeatures([
       new Feature(new Point(fromLonLat(coords)))
@@ -326,7 +341,7 @@ document.getElementById('buttonstart2').addEventListener('click', function(event
   navigator.geolocation.getCurrentPosition(function(pos) {
     const coords = [pos.coords.longitude, pos.coords.latitude];
     coords2 = coords;
-    console.log('GPSposition 2: ' + coords);
+    // console.log('GPSposition 2: ' + coords);
     startSource2.clear(true);
     startSource2.addFeatures([
       new Feature(new Point(fromLonLat(coords)))
@@ -346,7 +361,7 @@ go.addEventListener('click', function(event) {
   //Funktionsaufruf um die Abfrage zu starten
   const coord_value = [coords1, coords2];
   const coord_str = JSON.stringify(coord_value);
-  console.log('STRINGIFY: ' + coord_str);
+  // console.log('STRINGIFY: ' + coord_str);
 
   requestIsochrones(coord_str, mode_value, time_value);
   //'[[16.369225,48.198129],[16.357001,48.233942]]'
@@ -357,14 +372,9 @@ go.addEventListener('click', function(event) {
 // übergibt die Isochrone und weitere Infos an den Server
 ///////////////////
 
-///////////////////////////////////////////////////////
-///////////HIER IST EINE ERGÄNZUNG NOTWENDIG////////////
-// die Art des Treffpunkts muss auch noch mit übergeben werden
-// allenfalls auch die laufnummer o.ä.
-
 function returnResult(res) {
   isoSource.clear(true);
-  console.log(res);
+  // console.log(res);
 
   // const test_coords = [16.372, 48.209];
 
@@ -373,9 +383,9 @@ function returnResult(res) {
   );
 
   //hier muss die weitere Datenverarbeitung bzw. die Kommunikation mit der Datenbank stattfinden
-  const res_ueb = 'res_ueb=' + res; // JSON.stringify(res);
+  const res_ueb = 'res_ueb=' + res + '&poiCat=' + poiCat_value; // JSON.stringify(res);
 
-  console.log(res_ueb);
+  // console.log(res_ueb);
 
   const requestDB = new XMLHttpRequest();
   requestDB.open('POST', 'iso.php', true);
@@ -383,7 +393,7 @@ function returnResult(res) {
   requestDB.send(res_ueb);
 
   requestDB.onreadystatechange = function() {
-    console.log('Status: ' + this.status);
+    // console.log('Status: ' + this.status);
 
     if (this.readyState === 4) {
       // console.log('Headers:', this.getAllResponseHeaders());
