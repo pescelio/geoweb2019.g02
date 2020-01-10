@@ -10,11 +10,13 @@ import sync from 'ol-hashed';
 import TileLayer from 'ol/layer/Tile';
 import VectorLayer from 'ol/layer/Vector';
 
+
 //Sources
 import Vector from 'ol/source/Vector';
 import VectorSource from 'ol/source/Vector';
 import OSM from 'ol/source/OSM';
 import XYZ from 'ol/source/XYZ';
+import Stamen from 'ol/source/Stamen';
 
 //Format
 import GeoJSON from 'ol/format/GeoJSON';
@@ -68,7 +70,9 @@ const satLayer = new TileLayer({
 
 //Base Layer von OSM hinzufügen
 const baseLayer = new TileLayer({
-  source: new OSM()
+  source: new Stamen({
+    layer: 'toner-lite'
+  })
 });
 map.addLayer(baseLayer);
 
@@ -109,13 +113,13 @@ const startLayer1 = new VectorLayer({
 startLayer1.setStyle(new Style({
   image: new Circle({
     fill: new Fill({
-      color: 'rgba(255,0,0,0.4)'
+      color: '#FFDE00'
     }),
     stroke: new Stroke({
       color: '#ff0000',
-      width: 1.25
+      width: 1
     }),
-    radius: 15
+    radius: 7
   })
 }));
 
@@ -131,13 +135,13 @@ const startLayer2 = new VectorLayer({
 startLayer2.setStyle(new Style({
   image: new Circle({
     fill: new Fill({
-      color: 'rgba(0,255,0,0.4)'
+      color: '#FFDE00'
     }),
     stroke: new Stroke({
-      color: '#00ff00',
-      width: 1.25
+      color: '#ff0000',
+      width: 1
     }),
-    radius: 15
+    radius: 7
   })
 }));
 
@@ -156,10 +160,10 @@ map.addLayer(isoLayer);
 
 isoLayer.setStyle(new Style({
   fill: new Fill({
-    color: 'rgba(128,0,255,0.4)'
+    color: 'rgba(235, 91, 12, 0.2)'
   }),
   stroke: new Stroke({
-    color: '#ff0000',
+    color: 'rgba(235, 91, 12, 1 )',
     width: 1.25
   })
 }));
@@ -383,7 +387,7 @@ function returnResult(res) {
   );
 
   //hier muss die weitere Datenverarbeitung bzw. die Kommunikation mit der Datenbank stattfinden
-  const res_ueb = 'res_ueb=' + res + '&poiCat=' + poiCat; // JSON.stringify(res);
+  const res_ueb = 'res_ueb=' + res + '&poiCat=' + poiCat_value; // JSON.stringify(res);
 
   // console.log(res_ueb);
 
