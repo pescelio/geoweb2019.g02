@@ -6,7 +6,7 @@
     <title>Projekt-Gruppe02</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
-  </head>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">  </head>
   <body>
     <!--
     Die Auswahl der Hintergrundkarte kann/sollte unabhängig der Steuerung der Applikation erfolgen
@@ -17,12 +17,26 @@
     – Wegzeit
     – Art Treffpunkt
     -->
-
+    <style media="screen">
+        .ol-zoom {
+         top: 88vh;
+         /* left: 200px; */
+         /* height: 30px; */
+      }
+    </style>
     <img src="images/logo.svg" alt="Logo" id="logo">
+    <form class="radio" id="layerControl">
+      <input class="rb" id="base" type="radio" name="radio-group" checked />
+      <label class="radio">Base-Layer OSM</label>
+      <br>
+      <input type="radio" name="radio-group" id="sat" class="rb"     />
+      <label class="radio">Sattelit</label>
+      <br>
+    </form>
     <div class="controlWrapper">
       <input type="text" id="search" placeholder="Suche..." />
       <br>
-      <form id="radio-demo">
+      <form class="radio">
         <p>Auswahl Startpunkt</p>
           <input class="rb" id="startingpoint1" type="radio" name="startingpoint" value="startingpoint1" checked />
           <label class="radio"> Startpunkt 1 </label>
@@ -35,15 +49,7 @@
           <button id="buttonstart2">Aktuelle Position wählen</button>
         <br>
 
-        <br>
-        <input class="rb" id="base" type="radio" name="radio-group" checked />
-        <label class="radio">Base-Layer OSM</label>
-        <br>
-        <input type="radio" name="radio-group" id="sat" class="rb"     />
-        <label class="radio">Sattelit</label>
-        <br>
-
-        <p>Auswahl der Mobilität:</p>
+        <p>Auswahl der Mobilität</p>
         <input class="rb" id="walk" value="foot-walking" type="radio" name="mobility" checked />
         <label class="radio">Zu Fuß</label>
         <br>
@@ -54,7 +60,7 @@
         <label class="radio">Mit dem Auto</label>
 
 
-        <p>Art des Treffpunkts:</p>
+        <p>Art des Treffpunkts</p>
         <input class="rb" id="restaurant" value="restaurant" type="radio" name="poi" checked />
         <label class="radio">Restaurant</label>
         <br>
@@ -78,7 +84,7 @@
         <br>
         <input class="rb" id="thirtyminutes" value="1800" type="radio" name="time" />
         <label class="radio">30 Minuten</label><br>
-
+        <br>
         <button type="button" name="go-button" id="go-button">GO!</button>
 
       </form>
