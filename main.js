@@ -10,11 +10,13 @@ import sync from 'ol-hashed';
 import TileLayer from 'ol/layer/Tile';
 import VectorLayer from 'ol/layer/Vector';
 
+
 //Sources
 import Vector from 'ol/source/Vector';
 import VectorSource from 'ol/source/Vector';
 import OSM from 'ol/source/OSM';
 import XYZ from 'ol/source/XYZ';
+import Stamen from 'ol/source/Stamen';
 
 //Format
 import GeoJSON from 'ol/format/GeoJSON';
@@ -68,7 +70,9 @@ const satLayer = new TileLayer({
 
 //Base Layer von OSM hinzufügen
 const baseLayer = new TileLayer({
-  source: new OSM()
+  source: new Stamen({
+    layer: 'watercolor'
+  })
 });
 map.addLayer(baseLayer);
 
