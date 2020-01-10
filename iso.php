@@ -15,10 +15,9 @@
 
   // variable aus js 
   $php_iso = $_POST['res_ueb'];
-  
-  echo $php_iso;
+  echo 'inhalt des übergebenen Arrays: ';
 
-  
+  print_r ($php_iso);
 
   // damit jeweils die richtigen Einträge bentutzt werden, 
   // sollten wir wohl noch eine Laufnummer oder etwas ähnliches erzeugen
@@ -58,9 +57,32 @@
     FROM data
   ) AS f)";
 
+	//isochrone verschneiden, polygone speichern
+
+	$intersect = "insert into g02.testpolygone(geom) 
+	select (ST_intersection(a.geom, b.geom)) from g02.testisochrone a, g02.testisochrone b 
+	where ST_Intersects(a.geom,b.geom) AND a.id<b.id 
+	And a.id=(SELECT id FROM g02.testisochrone ORDER BY id DESC OFFSET 1 ROW FETCH FIRST 1 ROW ONLY)";
+
+	//srid für polygone definiern
+	$srid = "SELECT UpdateGeometrySRID('g02','testpolygone','geom',4326)";
+
+	// pois im polygon aussuchen
+	
+	// die cat variablen????????????????????????
+
+	$pois = "SELECT g02.restaurants.* 
+	FROM
+	g02.restaurants,
+	g02.testpolygone 
+	WHERE
+	g02.testpolygone.id=(Select max(id) FROM g02.testpolygone) AND
+	ST_contains(g02.testpolygone.geom, g02.restaurants.geom)";
+	 
 
 
-  $result = pg_query($db,$insert) or die ('Fehler bei Speichern: '.pg_last_error($db));
+
+  $result = pg_query($db,$insert,$intersect,$srid,$pois) or die ('Fehler bei Speichern: '.pg_last_error($db));
   echo $result;
 
   // Hier müssen die Isochrone verschnitten werden
