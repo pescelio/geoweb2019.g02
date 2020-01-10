@@ -18,61 +18,70 @@
     – Art Treffpunkt
     -->
 
-    <div class="conrolWrapper">
-      <input type="text" id="search" placeholder="Suche..."></input>
-      <div id="control">
-        <label class="radio">
-          <input class="rb" id="base" type="radio" name="foobar" checked>
-          Base-Layer OSM
-        </label><br>
-        <label class="radio">
-          <input class="rb" id="sat" type="radio" name="foobar">
-          Sattelite
-        </label><br>
-        <p>Auswahl der Mobilität:</p>
-        <label class="radio">
-          <input class="rb" id="walk" value="foot-walking" type="radio" name="mobility" checked>
-          Zu Fuß
-        </label><br>
-        <label class="radio">
-          <input class="rb" id="bike" value="cycling-regular" type="radio" name="mobility">
-          Mit dem Fahrrad
-        </label><br>
-        <label class="radio">
-          <input class="rb" id="car" value="driving-car" type="radio" name="mobility">
-          Mit dem Auto
-        </label>
-        <p>Art des Treffpunkts:</p>
-        <select>
-          <option value="restaurant" name="poiCat" checked>Restaurant</option>
-          <option value="cafe" name="poiCat">Cafe</option>
-          <option value="bar" name="poiCat">Bar</option>
-          <option value="park" name="poiCat">Park</option>
-        </select>
-        <p>Wegzeit</p>
-        <label class="radio">
-          <input class="rb" id="tenminutes" value="600" type="radio" name="time" checked>
-          10 Minuten
-        </label><br>
-        <label class="radio">
-          <input class="rb" id="twentyminutes" value="1200" type="radio" name="time">
-          20 Minuten
-        </label><br>
-        <label class="radio">
-          <input class="rb" id="thirtyminutes" value="1800" type="radio" name="time">
-          30 Minuten
-        </label><br>
+    <img src="images/logo.svg" alt="Logo" id="logo">
+    <div class="controlWrapper">
+      <input type="text" id="search" placeholder="Suche..." />
+      <br>
+      <form id="radio-demo">
         <p>Auswahl Startpunkt</p>
-        <label class="radio">
-          <input class="rb" id="startingpoint1" type="radio" name="startingpoint" value="startingpoint1" checked>
-          Startpunkt 1 <button id="buttonstart1">Aktuelle Position wählen</button>
-        </label><br>
-        <label class="radio">
-            <input class="rb" id="startingpoint2" type="radio" name="startingpoint" value="startingpoint2">
-            Startpunkt 2 <button id="buttonstart2">Aktuelle Position wählen</button>
-        </label><br>
+          <input class="rb" id="startingpoint1" type="radio" name="startingpoint" value="startingpoint1" checked />
+          <label class="radio"> Startpunkt 1 </label>
+        <br>
+          <button id="buttonstart1">Aktuelle Position wählen</button>
+        <br>
+          <input class="rb" id="startingpoint2" type="radio" name="startingpoint" value="startingpoint2" />
+          <label class="radio">Startpunkt 2 </label>
+        <br>
+          <button id="buttonstart2">Aktuelle Position wählen</button>
+        <br>
+
+        <br>
+        <input class="rb" id="base" type="radio" name="radio-group" checked />
+        <label class="radio">Base-Layer OSM</label>
+        <br>
+        <input type="radio" name="radio-group" id="sat" class="rb"     />
+        <label class="radio">Sattelit</label>
+        <br>
+
+        <p>Auswahl der Mobilität:</p>
+        <input class="rb" id="walk" value="foot-walking" type="radio" name="mobility" checked />
+        <label class="radio">Zu Fuß</label>
+        <br>
+        <input class="rb" id="bike" value="cycling-regular" type="radio" name="mobility" />
+        <label class="radio">Mit dem Fahrrad</label>
+        <br>
+        <input class="rb" id="car" value="driving-car" type="radio" name="mobility" />
+        <label class="radio">Mit dem Auto</label>
+
+
+        <p>Art des Treffpunkts:</p>
+        <input class="rb" id="restaurant" value="restaurant" type="radio" name="poi" checked />
+        <label class="radio">Restaurant</label>
+        <br>
+        <input class="rb" id="cafe" value="cafe" type="radio" name="poi" />
+        <label class="radio">Cafe</label>
+        <br>
+        <input class="rb" id="bar" value="restaurant" type="radio" name="poi" />
+        <label class="radio">Bar</label>
+        <br>
+        <input class="rb" id="park" value="restaurant" type="radio" name="poi" />
+        <label class="radio">Park</label>
+        <br>
+
+
+        <p>Wegzeit</p>
+        <input class="rb" id="tenminutes" value="600" type="radio" name="time" checked />
+        <label class="radio">10 Minuten</label>
+        <br>
+        <input class="rb" id="twentyminutes" value="1200" type="radio" name="time" />
+        <label class="radio">20 Minuten</label>
+        <br>
+        <input class="rb" id="thirtyminutes" value="1800" type="radio" name="time" />
+        <label class="radio">30 Minuten</label><br>
+
         <button type="button" name="go-button" id="go-button">GO!</button>
-      </div>
+
+      </form>
     </div>
 
     <div id="map" class="fullscreen">
