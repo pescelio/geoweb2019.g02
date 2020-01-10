@@ -7,7 +7,7 @@
   $php_iso = $_POST['res_ueb'];
 
   //$poiCat = $_POST['poiCat'];
-  $poiCat = "restaurant";
+  $poiCat = "restaurants";
   // echo $poiCat;
 
   //echo "<----------->";
@@ -90,7 +90,7 @@
     'geometry',   ST_AsGeoJSON(geom)::jsonb,
     'properties', to_jsonb(inputs) -'geom'
   ) AS feature
-  FROM (SELECT g02.$poiCat.gid, g02.$poiCat.name,  g02.$poiCat.addr_stree, g02.$poiCat.geom
+  FROM (SELECT g02.$poiCat.gid, g02.$poiCat.name, g02.$poiCat.geom
       FROM
       g02.$poiCat,
       g02.testpolygone
