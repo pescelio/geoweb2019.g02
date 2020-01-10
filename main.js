@@ -423,8 +423,9 @@ function returnResult(res) {
     if (this.readyState === 4) {
       // console.log('Headers:', this.getAllResponseHeaders());
       const responseText = this.responseText;
+      console.log(responseText);
       const response = JSON.parse(responseText);
-      console.log('parse ' + response);
+      console.log(response);
 
       const POI = response.jsonb_build_object;
       console.log('response ' + POI);
