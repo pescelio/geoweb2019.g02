@@ -103,45 +103,43 @@
 // st_AsGeoJSON fehlt noch
  
   $srid_rereset = pg_query($db,$srid_reset) or die ('Fehler bei koordinatensys: '.pg_last_error($db));
-  echo "SRID-Reset: ".$srid_rereset;
+  // echo "SRID-Reset: ".$srid_rereset;
 
   $insert_result = pg_query($db,$insert) or die ('Fehler bei Insert: '.pg_last_error($db));
-  echo "INS-RESULT: ".$insert_result;
+  // echo "INS-RESULT: ".$insert_result;
 
   $srid_result = pg_query($db,$srid) or die ('Fehler bei koordinatensys: '.pg_last_error($db));
-  echo "SRID-Result: ".$srid_result;
+  // echo "SRID-Result: ".$srid_result;
 
   $intersect_result = pg_query($db, $intersect) or die ('Fehler bei intersect: '.pg_last_error($db));
-  echo "INTERSECT-Result: ".$intersect_result;
+  // echo "INTERSECT-Result: ".$intersect_result;
     
   $pois_result = pg_query($db,$pois) or die ('Fehler bei pois: '.pg_last_error($db));
-  echo "POIS-Result: ".$pois_result;
+  // echo "POIS-Result: ".$pois_result;
   $pois_pg_result = pg_fetch_array($pois_result);
-  echo "alles gefetched:".$pois_pg_result;
+  // echo "alles gefetched:".$pois_pg_result;
 
 
   // zeilen- und Spaltenanzahl des Abfrageergebnisses anzeigen
-  echo '<p>Das Abfrageergebnis hat '.pg_num_rows($pois_result).' Zeilen und '.
+  // echo '<p>Das Abfrageergebnis hat '.pg_num_rows($pois_result).' Zeilen und '.
   pg_num_fields($pois_result).' Spalten.</p>';
 
   // Erste Zeile des Abfrageergebnisses lesen
   $zeile = pg_fetch_assoc($pois_result); 
 
   // Erste Zeile (in assoziativem Array) verarbeiten
-  echo '<p>Die 1. Zeile ist: '.$zeile["iu"]. 
-  '  '.$zeile["iuiuih"].'</p>';
+  // echo '<p>Die 1. Zeile ist: '.$zeile["iu"]. 
+  // '  '.$zeile["iuiuih"].'</p>';
 
   // Oder gleich alle Zeilen in assoziatives Array laden
-  echo '<p>Es können auch alle Zeilen übertragen und mal unlayoutiert angezeigt werden:</p>';
+  // echo '<p>Es können auch alle Zeilen übertragen und mal unlayoutiert angezeigt werden:</p>';
   $tab = pg_fetch_all($pois_result);
-  echo '<pre>'; print_r($tab); echo '</pre>';
+  // echo '<pre>'; print_r($tab); echo '</pre>';
 
   foreach($tab as $k => $a) {
     $tab[$k] = json_encode($a);
     echo $tab[$k];
   }
-
-  echo "After foreach-loop: ".$tab;
 
   //$json_pois = json_encode($pois_pg_result, JSON_THROW_ON_ERROR);
   //echo "json encode:".$json_pois;
@@ -152,6 +150,6 @@
 
   // Datenbank schliessen
   include 'geoweb_pg_close.php';
-  echo "Die Datenbank wurde geschlossen";
+  // echo "Die Datenbank wurde geschlossen";
 
   ?>

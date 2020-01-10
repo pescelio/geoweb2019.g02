@@ -172,6 +172,15 @@ isoLayer.setStyle(new Style({
   })
 }));
 
+const poiSource = new Vector();
+
+const poiLayer = new VectorLayer({
+  source: poiSource
+});
+
+poiLayer.setZIndex(150);
+map.addLayer(poiLayer);
+
 //////////////////////////
 //gets the GPS-Location and accuracy from the browsers geolocation
 //adds point to the layer
@@ -405,16 +414,20 @@ function returnResult(res) {
 
     if (this.readyState === 4) {
       // console.log('Headers:', this.getAllResponseHeaders());
-      console.log('this.responseText: ' + this.responseText);
+      const response = JSON.parse(this.responseText);
+      console.log('parse ' + response);
+
+      const POI = response.jsonb_build_object;
+      console.log('response ' + POI);
+
+      poiSource.addFeatures(
+        new GeoJSON({featureProjection: 'EPSG:3857'}).readFeatures(POI)
+      );
+
+      // console.log('Stringify: ' + JSON.stringify(response));
     }
   };
 
-  // $.ajax({
-  //   url: 'iso.php',
-  //   type: 'POST',
-  //   data: {res_str: JSON.stringify(res)},
-  //   dataType: 'json'
-  // });
 }
 
 ///////////////////
