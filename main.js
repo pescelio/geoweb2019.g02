@@ -179,15 +179,6 @@ const poiLayer = new VectorLayer({
 poiLayer.setZIndex(150);
 map.addLayer(poiLayer);
 
-poiLayer.setStyle(new Style({
-  image: new Icon({
-    anchor: [0.5, 30],
-    scale: 0.6,
-    anchorXUnits: 'fraction',
-    anchorYUnits: 'pixels',
-    src: 'icons/cafe.png'
-  })
-}));
 
 //////////////////////////
 //gets the GPS-Location and accuracy from the browsers geolocation
@@ -429,6 +420,17 @@ function returnResult(res) {
 
       const POI = response.jsonb_build_object;
       console.log('response ' + POI);
+
+      poiLayer.setStyle(new Style({
+        image: new Icon({
+          anchor: [0.5, 30],
+          scale: 0.6,
+          anchorXUnits: 'fraction',
+          anchorYUnits: 'pixels',
+          src: 'icons/' + poiCat_value + '.png'
+        })
+      }));
+      
       poiSource.clear(true);
       poiSource.addFeatures(
         new GeoJSON({featureProjection: 'EPSG:3857'}).readFeatures(POI)

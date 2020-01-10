@@ -105,8 +105,11 @@
   // echo "SRID-Result: ".$srid_result;
 
   $intersect_result = pg_query($db, $intersect) or die ('Fehler bei intersect: '.pg_last_error($db));
-  if ($intersect_result) {
-    $faetsch = pg_fetch_all($intersect_result);
+  // $intersect_pg_result = pg_fetch_object($intersect_result);
+  // if (empty($intersect_result)) { 
+  // $count = pg_num_rows($intersect_result); 
+  // if ($count !== 0) {
+    // $faetsch = pg_fetch_all($intersect_result);
     // echo "fuer michi ".$faetsch;
   
     // echo "INTERSECT-Result: ".$intersect_result;
@@ -137,9 +140,9 @@
       $tab[$k] = json_encode($a);
       echo $tab[$k];
     }
-  } else {
-    echo "Ein Fehler ist aufgetreten!\n";
-  }
+  // } else {
+  //   echo "Ein Fehler ist aufgetreten!\n";
+  // }
 
   //$json_pois = json_encode($pois_pg_result, JSON_THROW_ON_ERROR);
   //echo "json encode:".$json_pois;
