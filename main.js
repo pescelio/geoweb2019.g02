@@ -111,15 +111,12 @@ const startLayer1 = new VectorLayer({
 });
 
 startLayer1.setStyle(new Style({
-  image: new Circle({
-    fill: new Fill({
-      color: '#FFDE00'
-    }),
-    stroke: new Stroke({
-      color: '#ff0000',
-      width: 1
-    }),
-    radius: 7
+  image: new Icon({
+    anchor: [0.5, 30],
+    scale: 0.25,
+    anchorXUnits: 'fraction',
+    anchorYUnits: 'pixels',
+    src: 'icons/startpoint.png'
   })
 }));
 
@@ -133,15 +130,12 @@ const startLayer2 = new VectorLayer({
 });
 
 startLayer2.setStyle(new Style({
-  image: new Circle({
-    fill: new Fill({
-      color: '#FFDE00'
-    }),
-    stroke: new Stroke({
-      color: '#ff0000',
-      width: 1
-    }),
-    radius: 7
+  image: new Icon({
+    anchor: [0.5, 30],
+    scale: 0.25,
+    anchorXUnits: 'fraction',
+    anchorYUnits: 'pixels',
+    src: 'icons/startpoint.png'
   })
 }));
 
@@ -429,8 +423,7 @@ function returnResult(res) {
           anchorYUnits: 'pixels',
           src: 'icons/' + poiCat_value + '.png'
         })
-      }));
-      
+      })); 
       poiSource.clear(true);
       poiSource.addFeatures(
         new GeoJSON({featureProjection: 'EPSG:3857'}).readFeatures(POI)
