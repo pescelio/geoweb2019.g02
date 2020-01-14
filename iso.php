@@ -46,9 +46,9 @@
 	$srid = "SELECT UpdateGeometrySRID('g02','testisochrone','geom',4326)";
 
   //verschneiden sich die isochrone?
-  // $verschneiden ="SELECT ST_Intersects(a.geom, b.geom) from g02.testisochrone a, g02.testisochrone b 
-  // where a.id<b.id
-  // And a.id =(SELECT id FROM g02.testisochrone ORDER BY id DESC OFFSET 1 ROW FETCH FIRST 1 ROW ONLY)"; 
+  $verschneiden ="SELECT ST_Intersects(a.geom, b.geom) from g02.testisochrone a, g02.testisochrone b 
+  where a.id<b.id
+  And a.id =(SELECT id FROM g02.testisochrone ORDER BY id DESC OFFSET 1 ROW FETCH FIRST 1 ROW ONLY)"; 
 
   //isochrone verschneiden, polygone speichern
 
@@ -109,15 +109,22 @@
   $srid_result = pg_query($db,$srid) or die ('Fehler bei koordinatensys: '.pg_last_error($db));
   // echo "SRID-Result: ".$srid_result;
   
-  // $iso_verschneiden = pg_query($db,$verschneiden) or die ('fehler bei verschneiden sich die isochrone?')
+  // $poly_verschneiden = pg_query($db,$verschneiden) or die ('fehler bei verschneiden sich die isochrone?');
+  // $faetsch = pg_fetch_array($poly_verschneiden);
+  // echo $faetsch;
+  
+
   // if ($iso_verschneiden){
 
-
-
       $intersect_result = pg_query($db, $intersect) or die ('Fehler bei intersect: '.pg_last_error($db));
-      // $intersect_pg_result = pg_fetch_object($intersect_result);
+      // $intersect_pg_result = pg_fetch_array($intersect_result);
       // if (empty($intersect_result)) { 
-      // $count = pg_num_rows($intersect_result); 
+      
+      if(pg_affected_rows($intersect_result) == 0) {
+        exit();
+      }
+
+      // echo $count;
       // if ($count !== 0) {
         // $faetsch = pg_fetch_all($intersect_result);
         // echo "fuer michi ".$faetsch;
@@ -150,9 +157,9 @@
           $tab[$k] = json_encode($a);
           echo $tab[$k];
         }
-      // } else {
-      //   echo "Ein Fehler ist aufgetreten!\n";
-      // }
+        // } else {
+        //   echo "Ein Fehler ist aufgetreten!\n";
+        // }
 
       //$json_pois = json_encode($pois_pg_result, JSON_THROW_ON_ERROR);
       //echo "json encode:".$json_pois;

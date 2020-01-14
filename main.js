@@ -5,6 +5,8 @@ import Map from 'ol/Map';
 import View from 'ol/View';
 import Feature from 'ol/Feature';
 import sync from 'ol-hashed';
+import Overlay from 'ol/Overlay';
+
 
 // Layers
 import TileLayer from 'ol/layer/Tile';
@@ -256,24 +258,69 @@ rbStartingpoint1.addEventListener('click', function() {
   startSource = startSource1;
 });
 
+const overlay = new Overlay({
+  element: document.getElementById('popup-container'),
+  positioning: 'bottom-center',
+  offset: [0, -10],
+  autoPan: true
+});
+map.addOverlay(overlay);
+
+map.on('pointermove', (e) => {
+  const pixel = map.getEventPixel(e.originalEvent);
+  const hit = map.hasFeatureAtPixel(pixel, {
+    layerFilter: (l) => l === poiLayer //kurzschreibweise für Callbackfunction
+  });
+  document.getElementById('map').style.cursor = hit ? 'pointer' : '';
+});
+
 //////////////////////////////
 // Marker per Klick in Karte setzen
 //////////////////////////////
 
 map.on('singleclick', function(e) {
-  const coords = toLonLat(e.coordinate);
-  if (startSource === startSource1) {
-    coords1 = coords;
+  // hier prüfen, ob schon ein feature da liegt
+  document.getElementById('popup-container').style.display = 'none';
+
+  const hit = map.hasFeatureAtPixel(e.pixel, {
+    layerFilter: (l) => l === poiLayer //kurzschreibweise für Callbackfunction
+  });
+
+  if (hit) {
+    let markup = ''; // the variable "markup" is html code, as string
+    document.getElementById('popup-container').style.display = 'block';
+    map.forEachFeatureAtPixel(e.pixel, function(feature) {
+      const properties = feature.getProperties();
+      markup += markup + '<p>';
+      for (const property in properties) {
+        if (property === 'name') {
+          markup += properties[property];
+        }
+      }
+      markup += '</p>';
+    }, {
+      layerFilter: (l) => l === poiLayer //kurzschreibweise für Callbackfunction
+    });
+    if (markup) { // if any table was created (= feature already existed at clicked point)
+      document.getElementById('popup-content').innerHTML = markup;
+      overlay.setPosition(e.coordinate);
+    }
   } else {
-    coords2 = coords;
+    // wenn kein feature da liegt, den punkt setzen
+    const coords = toLonLat(e.coordinate);
+    if (startSource === startSource1) {
+      coords1 = coords;
+    } else {
+      coords2 = coords;
+    }
+    startSource.clear(true);
+    startSource.addFeatures([
+      new Feature(new Point(fromLonLat(coords)))
+    ]);
+    //console.log(startSource);
+    // console.log('Koordinaten des Klicks sind: ' + coords);
+    // Hier die Koordinaten für den Isochrone-Request übergeben (via funktionsaufruf)?
   }
-  startSource.clear(true);
-  startSource.addFeatures([
-    new Feature(new Point(fromLonLat(coords)))
-  ]);
-  //console.log(startSource);
-  // console.log('Koordinaten des Klicks sind: ' + coords);
-  // Hier die Koordinaten für den Isochrone-Request übergeben (via funktionsaufruf)?
 
 });
 
@@ -372,7 +419,7 @@ go.addEventListener('click', function(event) {
   const coord_value = [coords1, coords2];
   const coord_str = JSON.stringify(coord_value);
   // console.log('STRINGIFY: ' + coord_str);
-
+  document.getElementById('popup-container').style.display = 'none';
   requestIsochrones(coord_str, mode_value, time_value);
   //'[[16.369225,48.198129],[16.357001,48.233942]]'
 });
@@ -404,16 +451,17 @@ function returnResult(res) {
 
   requestDB.onreadystatechange = function() {
     // console.log('Status: ' + this.status);
+    poiSource.clear(true);
 
-    if (this.readyState === 4) {
+    if (this.responseText != '' && this.readyState === 4) {
       // console.log('Headers:', this.getAllResponseHeaders());
-      const responseText = this.responseText;
-      console.log(responseText);
-      const response = JSON.parse(responseText);
-      console.log(response);
+      // hier noch die 
+
+      const response = JSON.parse(this.responseText);
+      //console.log(response);
 
       const POI = response.jsonb_build_object;
-      console.log('response ' + POI);
+      //console.log('response ' + POI);
 
       poiLayer.setStyle(new Style({
         image: new Icon({
@@ -423,8 +471,8 @@ function returnResult(res) {
           anchorYUnits: 'pixels',
           src: 'icons/' + poiCat_value + '.png'
         })
-      })); 
-      poiSource.clear(true);
+      }));
+
       poiSource.addFeatures(
         new GeoJSON({featureProjection: 'EPSG:3857'}).readFeatures(POI)
       );
