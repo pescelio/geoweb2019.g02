@@ -45,7 +45,12 @@
 	///srid für isochrone definiern
 	$srid = "SELECT UpdateGeometrySRID('g02','testisochrone','geom',4326)";
 
-	//isochrone verschneiden, polygone speichern
+  //verschneiden sich die isochrone?
+  // $verschneiden ="SELECT ST_Intersects(a.geom, b.geom) from g02.testisochrone a, g02.testisochrone b 
+  // where a.id<b.id
+  // And a.id =(SELECT id FROM g02.testisochrone ORDER BY id DESC OFFSET 1 ROW FETCH FIRST 1 ROW ONLY)"; 
+
+  //isochrone verschneiden, polygone speichern
 
 	$intersect = "INSERT INTO g02.testpolygone(geom) 
 	select (ST_intersection(a.geom, b.geom)) from g02.testisochrone a, g02.testisochrone b 
@@ -103,54 +108,59 @@
 
   $srid_result = pg_query($db,$srid) or die ('Fehler bei koordinatensys: '.pg_last_error($db));
   // echo "SRID-Result: ".$srid_result;
+  
+  // $iso_verschneiden = pg_query($db,$verschneiden) or die ('fehler bei verschneiden sich die isochrone?')
+  // if ($iso_verschneiden){
 
-  $intersect_result = pg_query($db, $intersect) or die ('Fehler bei intersect: '.pg_last_error($db));
-  // $intersect_pg_result = pg_fetch_object($intersect_result);
-  // if (empty($intersect_result)) { 
-  // $count = pg_num_rows($intersect_result); 
-  // if ($count !== 0) {
-    // $faetsch = pg_fetch_all($intersect_result);
-    // echo "fuer michi ".$faetsch;
-  
-    // echo "INTERSECT-Result: ".$intersect_result;
-  
-    $pois_result = pg_query($db,$pois) or die ('Fehler bei pois: '.pg_last_error($db));
-    // echo "POIS-Result: ".$pois_result;
-    $pois_pg_result = pg_fetch_array($pois_result);
-    // echo "alles gefetched:".$pois_pg_result;
-  
-  
-    // zeilen- und Spaltenanzahl des Abfrageergebnisses anzeigen
-    // echo '<p>Das Abfrageergebnis hat '.pg_num_rows($pois_result).' Zeilen und '.
-    // pg_num_fields($pois_result).' Spalten.</p>';
-  
-    // Erste Zeile des Abfrageergebnisses lesen
-    $zeile = pg_fetch_assoc($pois_result); 
-  
-    // Erste Zeile (in assoziativem Array) verarbeiten
-    // echo '<p>Die 1. Zeile ist: '.$zeile["iu"]. 
-    // '  '.$zeile["iuiuih"].'</p>';
-  
-    // Oder gleich alle Zeilen in assoziatives Array laden
-    // echo '<p>Es können auch alle Zeilen übertragen und mal unlayoutiert angezeigt werden:</p>';
-    $tab = pg_fetch_all($pois_result);
-    // echo '<pre>'; print_r($tab); echo '</pre>';
-  
-    foreach($tab as $k => $a) {
-      $tab[$k] = json_encode($a);
-      echo $tab[$k];
-    }
-  // } else {
-  //   echo "Ein Fehler ist aufgetreten!\n";
+
+
+      $intersect_result = pg_query($db, $intersect) or die ('Fehler bei intersect: '.pg_last_error($db));
+      // $intersect_pg_result = pg_fetch_object($intersect_result);
+      // if (empty($intersect_result)) { 
+      // $count = pg_num_rows($intersect_result); 
+      // if ($count !== 0) {
+        // $faetsch = pg_fetch_all($intersect_result);
+        // echo "fuer michi ".$faetsch;
+      
+        // echo "INTERSECT-Result: ".$intersect_result;
+      
+        $pois_result = pg_query($db,$pois) or die ('Fehler bei pois: '.pg_last_error($db));
+        // echo "POIS-Result: ".$pois_result;
+        $pois_pg_result = pg_fetch_array($pois_result);
+        // echo "alles gefetched:".$pois_pg_result;
+      
+      
+        // zeilen- und Spaltenanzahl des Abfrageergebnisses anzeigen
+        // echo '<p>Das Abfrageergebnis hat '.pg_num_rows($pois_result).' Zeilen und '.
+        // pg_num_fields($pois_result).' Spalten.</p>';
+      
+        // Erste Zeile des Abfrageergebnisses lesen
+        $zeile = pg_fetch_assoc($pois_result); 
+      
+        // Erste Zeile (in assoziativem Array) verarbeiten
+        // echo '<p>Die 1. Zeile ist: '.$zeile["iu"]. 
+        // '  '.$zeile["iuiuih"].'</p>';
+      
+        // Oder gleich alle Zeilen in assoziatives Array laden
+        // echo '<p>Es können auch alle Zeilen übertragen und mal unlayoutiert angezeigt werden:</p>';
+        $tab = pg_fetch_all($pois_result);
+        // echo '<pre>'; print_r($tab); echo '</pre>';
+      
+        foreach($tab as $k => $a) {
+          $tab[$k] = json_encode($a);
+          echo $tab[$k];
+        }
+      // } else {
+      //   echo "Ein Fehler ist aufgetreten!\n";
+      // }
+
+      //$json_pois = json_encode($pois_pg_result, JSON_THROW_ON_ERROR);
+      //echo "json encode:".$json_pois;
+      
+      // Hier müssen die Isochrone verschnitten werden
+      // und die Abfrage der Amenities gemacht werden
+
   // }
-
-  //$json_pois = json_encode($pois_pg_result, JSON_THROW_ON_ERROR);
-  //echo "json encode:".$json_pois;
-  
-  // Hier müssen die Isochrone verschnitten werden
-  // und die Abfrage der Amenities gemacht werden
-
-
   // Datenbank schliessen
   include 'geoweb_pg_close.php';
   // echo "Die Datenbank wurde geschlossen";
