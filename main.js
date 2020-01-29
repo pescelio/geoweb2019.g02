@@ -266,6 +266,19 @@ const overlay = new Overlay({
 });
 map.addOverlay(overlay);
 
+const closer = document.getElementById('popup-closer');
+
+/**
+ * Add a click handler to hide the popup.
+ * @return {boolean} Don't follow the href.
+ */
+closer.onclick = function() {
+  overlay.setPosition(undefined);
+  closer.blur();
+  return false;
+};
+
+
 map.on('pointermove', (e) => {
   const pixel = map.getEventPixel(e.originalEvent);
   const hit = map.hasFeatureAtPixel(pixel, {
@@ -455,7 +468,7 @@ function returnResult(res) {
 
     if (this.responseText != '' && this.readyState === 4) {
       // console.log('Headers:', this.getAllResponseHeaders());
-      // hier noch die 
+      // hier noch die
 
       const response = JSON.parse(this.responseText);
       //console.log(response);
