@@ -266,18 +266,6 @@ const overlay = new Overlay({
 });
 map.addOverlay(overlay);
 
-const closer = document.getElementById('popup-closer');
-
-/**
- * Add a click handler to hide the popup.
- * @return {boolean} Don't follow the href.
- */
-closer.onclick = function() {
-  overlay.setPosition(undefined);
-  closer.blur();
-  return false;
-};
-
 
 map.on('pointermove', (e) => {
   const pixel = map.getEventPixel(e.originalEvent);
