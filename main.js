@@ -47,13 +47,15 @@ import Zoom from 'ol/control/Zoom';
 
 // $(selector).hide();
 
+let view = new View({
+  center: olProj.fromLonLat([16.372, 48.209]),
+  zoom: 14
+})
+
 //init Map
 const map = new Map({
   target: 'map',
-  view: new View({
-    center: olProj.fromLonLat([16.372, 48.209]),
-    zoom: 14
-  })
+  view: view
 });
 
 // sync view of map with the url-hash
@@ -298,25 +300,31 @@ map.on('singleclick', function(e) {
     layerFilter: (l) => l === poiLayer //kurzschreibweise für Callbackfunction
   });
 
+
   if (hit) {
+    view.animate({center: e.coordinate}, {zoom: 17});
+    // map.getView().setZoom(map.getView().getZoom()+1);
     let markup = ''; // the variable "markup" is html code, as string
-    document.getElementById('popup-container').style.display = 'block';
-    map.forEachFeatureAtPixel(e.pixel, function(feature) {
-      const properties = feature.getProperties();
-      markup += markup + '<p>';
-      for (const property in properties) {
-        if (property === 'name') {
-          markup += properties[property];
+    if (map.getView().getZoom() === 17) {
+      document.getElementById('popup-container').style.display = 'block';
+      map.forEachFeatureAtPixel(e.pixel, function(feature) {
+        const properties = feature.getProperties();
+        markup += markup + '<p>';
+        for (const property in properties) {
+          if (property === 'name') {
+            markup += properties[property];
+          }
         }
+        markup += '</p>';
+      }, {
+        layerFilter: (l) => l === poiLayer //kurzschreibweise für Callbackfunction
+      });
+      if (markup) { // if any table was created (= feature already existed at clicked point)
+        document.getElementById('popup-content').innerHTML = markup;
+        overlay.setPosition(e.coordinate);
       }
-      markup += '</p>';
-    }, {
-      layerFilter: (l) => l === poiLayer //kurzschreibweise für Callbackfunction
-    });
-    if (markup) { // if any table was created (= feature already existed at clicked point)
-      document.getElementById('popup-content').innerHTML = markup;
-      overlay.setPosition(e.coordinate);
     }
+
   } else {
     // wenn kein feature da liegt, den punkt setzen
     const coords = toLonLat(e.coordinate);
@@ -474,10 +482,10 @@ function returnResult(res) {
       if (this.responseText !== ' ') {
         const response = JSON.parse(this.responseText);
         // console.log(response);
-  
+
         const POI = response.jsonb_build_object;
         //console.log('response ' + POI);
-  
+
         poiLayer.setStyle(new Style({
           image: new Icon({
             anchor: [0.5, 30],
@@ -487,7 +495,7 @@ function returnResult(res) {
             src: 'icons/' + poiCat_value + '.png'
           })
         }));
-  
+
         poiSource.addFeatures(
           new GeoJSON({featureProjection: 'EPSG:3857'}).readFeatures(POI)
         );
