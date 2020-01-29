@@ -213,4 +213,5 @@ color: white;
 }
 .ol-popup-closer:after {
   content: "×";
+  color: rgb(255, 255, 255);
 }
