@@ -47,13 +47,15 @@ import Zoom from 'ol/control/Zoom';
 
 // $(selector).hide();
 
+let view = new View({
+  center: olProj.fromLonLat([16.372, 48.209]),
+  zoom: 14
+})
+
 //init Map
 const map = new Map({
   target: 'map',
-  view: new View({
-    center: olProj.fromLonLat([16.372, 48.209]),
-    zoom: 14
-  })
+  view: view
 });
 
 // sync view of map with the url-hash
@@ -129,7 +131,7 @@ map.addLayer(startLayer1);
 const startSource2 = new Vector();
 const startLayer2 = new VectorLayer({
   source: startSource2
-});
+}); 
 
 startLayer2.setStyle(new Style({
   image: new Icon({
@@ -298,7 +300,11 @@ map.on('singleclick', function(e) {
     layerFilter: (l) => l === poiLayer //kurzschreibweise für Callbackfunction
   });
 
+
+
   if (hit) {
+    view.animate({zoom: 19}, {center: [0, 0]});
+    // map.getView().setZoom(map.getView().getZoom()+1);
     let markup = ''; // the variable "markup" is html code, as string
     document.getElementById('popup-container').style.display = 'block';
     map.forEachFeatureAtPixel(e.pixel, function(feature) {
