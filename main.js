@@ -457,25 +457,32 @@ function returnResult(res) {
       // console.log('Headers:', this.getAllResponseHeaders());
       // hier noch die 
 
-      const response = JSON.parse(this.responseText);
-      //console.log(response);
+      // console.log(this.responseText);
 
-      const POI = response.jsonb_build_object;
-      //console.log('response ' + POI);
+      if (this.responseText !== ' ') {
+        const response = JSON.parse(this.responseText);
+        // console.log(response);
+  
+        const POI = response.jsonb_build_object;
+        //console.log('response ' + POI);
+  
+        poiLayer.setStyle(new Style({
+          image: new Icon({
+            anchor: [0.5, 30],
+            scale: 0.6,
+            anchorXUnits: 'fraction',
+            anchorYUnits: 'pixels',
+            src: 'icons/' + poiCat_value + '.png'
+          })
+        }));
+  
+        poiSource.addFeatures(
+          new GeoJSON({featureProjection: 'EPSG:3857'}).readFeatures(POI)
+        );
+      } else {
+        return;
+      }
 
-      poiLayer.setStyle(new Style({
-        image: new Icon({
-          anchor: [0.5, 30],
-          scale: 0.6,
-          anchorXUnits: 'fraction',
-          anchorYUnits: 'pixels',
-          src: 'icons/' + poiCat_value + '.png'
-        })
-      }));
-
-      poiSource.addFeatures(
-        new GeoJSON({featureProjection: 'EPSG:3857'}).readFeatures(POI)
-      );
 
       // console.log('Stringify: ' + JSON.stringify(response));
     }
