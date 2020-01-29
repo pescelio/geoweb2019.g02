@@ -198,8 +198,19 @@ color: white;
 #popup-content {
   max-height: 200px;
   overflow: scroll;
+  overflow-x: hidden;
 }
 #popup-content th {
   text-align: left;
   width: 125px;
+}
+
+.ol-popup-closer {
+  text-decoration: none;
+  position: absolute;
+  top: 2px;
+  right: 8px;
+}
+.ol-popup-closer:after {
+  content: "×";
 }
