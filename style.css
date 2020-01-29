@@ -198,28 +198,19 @@ color: white;
 #popup-content {
   max-height: 200px;
   overflow: scroll;
+  overflow-x: hidden;
 }
 #popup-content th {
   text-align: left;
   width: 125px;
 }
 
-/* width */
-::-webkit-scrollbar {
-  width: 10px;
+.ol-popup-closer {
+  text-decoration: none;
+  position: absolute;
+  top: 2px;
+  right: 8px;
 }
-
-/* Track */
-::-webkit-scrollbar-track {
-  background: #3d3d3d;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #888;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
+.ol-popup-closer:after {
+  content: "×";
 }
