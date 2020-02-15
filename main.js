@@ -309,7 +309,7 @@ map.on('singleclick', function(e) {
 
 
   if (hit) {
-    view.animate({center: e.coordinate}, {zoom: 17});
+    view.animate({center: e.coordinate}, {zoom: 17}, {duration: 500});
     // map.getView().setZoom(map.getView().getZoom()+1);
     let markup = ''; // the variable "markup" is html code, as string
     if (map.getView().getZoom() === 17) {
@@ -327,8 +327,10 @@ map.on('singleclick', function(e) {
         layerFilter: (l) => l === poiLayer 
       });
       if (markup) { // if any table was created (= feature already existed at clicked point)
-        document.getElementById('popup-content').innerHTML = markup;
-        overlay.setPosition(e.coordinate);
+        setTimeout(function() {
+          document.getElementById('popup-content').innerHTML = markup;
+          overlay.setPosition(e.coordinate);
+        }, 550);
       }
     }
 
