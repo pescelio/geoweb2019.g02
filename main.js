@@ -104,12 +104,12 @@ base.addEventListener('click', function(event) {
 //Zoom-Buttons
 //const zoombuttons = new Zoom(className=zoombuttonoptions);
 
-//adds a new vectorlayer for the GPS based locationmark
-const GPSmarker = new VectorSource();
-const GPSlayer = new VectorLayer({
-  source: GPSmarker
-});
-map.addLayer(GPSlayer);
+// //adds a new vectorlayer for the GPS based locationmark
+// const GPSmarker = new VectorSource();
+// const GPSlayer = new VectorLayer({
+//   source: GPSmarker
+// });
+// map.addLayer(GPSlayer);
 
 // adds Layer für Startpunkt 1
 const startSource1 = new Vector();
@@ -185,19 +185,19 @@ map.addLayer(poiLayer);
 //gets the GPS-Location and accuracy from the browsers geolocation
 //adds point to the layer
 //////////////////////////
-navigator.geolocation.watchPosition(function(pos) {
-  const coords = [pos.coords.longitude, pos.coords.latitude];
-  const accuracy = circular(coords, pos.coords.accuracy);
-  GPSmarker.clear(true);
-  GPSmarker.addFeatures([
-    new Feature(accuracy.transform('EPSG:4326', map.getView().getProjection())),
-    new Feature(new Point(fromLonLat(coords)))
-  ]);
-}, function(error) {
-  alert(`ERROR: ${error.message}`);
-}, {
-  enableHighAccuracy: true
-});
+// navigator.geolocation.watchPosition(function(pos) {
+//   const coords = [pos.coords.longitude, pos.coords.latitude];
+//   const accuracy = circular(coords, pos.coords.accuracy);
+//   GPSmarker.clear(true);
+//   GPSmarker.addFeatures([
+//     new Feature(accuracy.transform('EPSG:4326', map.getView().getProjection())),
+//     new Feature(new Point(fromLonLat(coords)))
+//   ]);
+// }, function(error) {
+//   alert(`ERROR: ${error.message}`);
+// }, {
+//   enableHighAccuracy: true
+// });
 
 
 ////////////////////////////
@@ -283,10 +283,14 @@ closer.onclick = function() {
   return false;
 };
 
+//////////////////////////////
+// Veränderung Mauszeiger bei Hover über POI
+//////////////////////////////
+
 map.on('pointermove', (e) => {
   const pixel = map.getEventPixel(e.originalEvent);
   const hit = map.hasFeatureAtPixel(pixel, {
-    layerFilter: (l) => l === poiLayer //kurzschreibweise für Callbackfunction
+    layerFilter: (l) => l === poiLayer 
   });
   document.getElementById('map').style.cursor = hit ? 'pointer' : '';
 });
@@ -300,7 +304,7 @@ map.on('singleclick', function(e) {
   document.getElementById('popup-container').style.display = 'none';
 
   const hit = map.hasFeatureAtPixel(e.pixel, {
-    layerFilter: (l) => l === poiLayer //kurzschreibweise für Callbackfunction
+    layerFilter: (l) => l === poiLayer 
   });
 
 
@@ -320,7 +324,7 @@ map.on('singleclick', function(e) {
         }
         markup += '</p>';
       }, {
-        layerFilter: (l) => l === poiLayer //kurzschreibweise für Callbackfunction
+        layerFilter: (l) => l === poiLayer 
       });
       if (markup) { // if any table was created (= feature already existed at clicked point)
         document.getElementById('popup-content').innerHTML = markup;
@@ -398,40 +402,40 @@ input.addEventListener('keyup', function(event) {
 // GPS-Standort für Auswahl des Startpunkts verwenden
 ////////////////////////////
 
-// GPS-Standort in Startingpoint-Layer 1 erzeugen
-document.getElementById('buttonstart1').addEventListener('click', function(event) {
-  navigator.geolocation.getCurrentPosition(function(pos) {
-    const coords = [pos.coords.longitude, pos.coords.latitude];
-    coords1 = coords;
-    // console.log('GPSposition 1: ' + coords);
-    startSource1.clear(true);
-    startSource1.addFeatures([
-      new Feature(new Point(fromLonLat(coords)))
-    ]);
-  }, function(error) {
-    alert(`ERROR: ${error.message}`);
-  }, {
-    enableHighAccuracy: true
-  });
-});
+// // GPS-Standort in Startingpoint-Layer 1 erzeugen
+// document.getElementById('buttonstart1').addEventListener('click', function(event) {
+//   navigator.geolocation.getCurrentPosition(function(pos) {
+//     const coords = [pos.coords.longitude, pos.coords.latitude];
+//     coords1 = coords;
+//     // console.log('GPSposition 1: ' + coords);
+//     startSource1.clear(true);
+//     startSource1.addFeatures([
+//       new Feature(new Point(fromLonLat(coords)))
+//     ]);
+//   }, function(error) {
+//     alert(`ERROR: ${error.message}`);
+//   }, {
+//     enableHighAccuracy: true
+//   });
+// });
 
 
-// Eintrag am aktuellen Stanodort in Startingpoint-Layer 2 erzeugen
-document.getElementById('buttonstart2').addEventListener('click', function(event) {
-  navigator.geolocation.getCurrentPosition(function(pos) {
-    const coords = [pos.coords.longitude, pos.coords.latitude];
-    coords2 = coords;
-    // console.log('GPSposition 2: ' + coords);
-    startSource2.clear(true);
-    startSource2.addFeatures([
-      new Feature(new Point(fromLonLat(coords)))
-    ]);
-  }, function(error) {
-    alert(`ERROR: ${error.message}`);
-  }, {
-    enableHighAccuracy: true
-  });
-});
+// // Eintrag am aktuellen Stanodort in Startingpoint-Layer 2 erzeugen
+// document.getElementById('buttonstart2').addEventListener('click', function(event) {
+//   navigator.geolocation.getCurrentPosition(function(pos) {
+//     const coords = [pos.coords.longitude, pos.coords.latitude];
+//     coords2 = coords;
+//     // console.log('GPSposition 2: ' + coords);
+//     startSource2.clear(true);
+//     startSource2.addFeatures([
+//       new Feature(new Point(fromLonLat(coords)))
+//     ]);
+//   }, function(error) {
+//     alert(`ERROR: ${error.message}`);
+//   }, {
+//     enableHighAccuracy: true
+//   });
+// });
 
 /////////////////
 // Get the go-Button
